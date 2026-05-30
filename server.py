@@ -22,19 +22,17 @@ DEFAULT_USERS = [
     ("kitchen", "kitchen123", "kitchen"),
 ]
 
-DEFAULT_TABLES = [
-    (str(i), "", 1) for i in range(1, 13)
-]
+DEFAULT_TABLES = [(str(i), "", 1) for i in range(1, 13)]
 
 DEFAULT_MENU = [
-    ("حمص بزيت الزيتون", "المقبلات", 3500, "حمص ناعم مع طحينة، زيت زيتون، وسماق.", "https://images.unsplash.com/photo-1604329760661-e71dc83f8f26?auto=format&fit=crop&w=700&q=80"),
-    ("فتوش", "المقبلات", 4000, "خضار طازجة، خبز محمص، ودبس رمان.", "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=700&q=80"),
-    ("مشاوي مشكلة", "الأطباق الرئيسية", 18000, "كباب، تكة، وشيش طاووق مع رز وخضار مشوية.", "https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?auto=format&fit=crop&w=700&q=80"),
-    ("سمك مشوي", "الأطباق الرئيسية", 22000, "سمك متبل بالليمون والثوم يقدم مع سلطة.", "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=700&q=80"),
-    ("ليمون بالنعناع", "المشروبات", 3000, "عصير بارد منعش مع نعناع طازج.", "https://images.unsplash.com/photo-1621263764928-df1444c5e859?auto=format&fit=crop&w=700&q=80"),
-    ("قهوة عربية", "المشروبات", 2500, "قهوة هيل خفيفة تقدم ساخنة.", "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=700&q=80"),
-    ("كنافة", "الحلويات", 6000, "كنافة جبن ساخنة مع قطر وفستق.", "https://images.unsplash.com/photo-1605197183305-6cae1788bc93?auto=format&fit=crop&w=700&q=80"),
-    ("بقلاوة", "الحلويات", 5000, "طبقات فستق وعجين رقيق محلى بالقطر.", "https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&w=700&q=80"),
+    ("حمص بزيت الزيتون", "المقبلات", 3500, "حمص ناعم مع طحينة، زيت زيتون، وسماق.", "https://images.unsplash.com/photo-1604329760661-e71dc83f8f26?w=200&h=200&fit=crop"),
+    ("فتوش", "المقبلات", 4000, "خضار طازجة، خبز محمص، ودبس رمان.", "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=200&h=200&fit=crop"),
+    ("مشاوي مشكلة", "الأطباق الرئيسية", 18000, "كباب، تكة، وشيش طاووق مع رز وخضار مشوية.", "https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=200&h=200&fit=crop"),
+    ("سمك مشوي", "الأطباق الرئيسية", 22000, "سمك متبل بالليمون والثوم يقدم مع سلطة.", "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=200&h=200&fit=crop"),
+    ("ليمون بالنعناع", "المشروبات", 3000, "عصير بارد منعش مع نعناع طازج.", "https://images.unsplash.com/photo-1621263764928-df1444c5e859?w=200&h=200&fit=crop"),
+    ("قهوة عربية", "المشروبات", 2500, "قهوة هيل خفيفة تقدم ساخنة.", "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=200&h=200&fit=crop"),
+    ("كنافة", "الحلويات", 6000, "كنافة جبن ساخنة مع قطر وفستق.", "https://images.unsplash.com/photo-1605197183305-6cae1788bc93?w=200&h=200&fit=crop"),
+    ("بقلاوة", "الحلويات", 5000, "طبقات فستق وعجين رقيق محلى بالقطر.", "https://images.unsplash.com/photo-1519676867240-f03562e64548?w=200&h=200&fit=crop"),
 ]
 
 
@@ -56,27 +54,23 @@ def init_db():
     connection = sqlite3.connect(DB_PATH)
     connection.row_factory = sqlite3.Row
     cur = connection.cursor()
-    cur.executescript(
-        """
+    cur.executescript("""
         CREATE TABLE IF NOT EXISTS users (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           username TEXT UNIQUE NOT NULL,
           password TEXT NOT NULL,
           role TEXT NOT NULL CHECK(role IN ('admin','cashier','kitchen'))
         );
-
         CREATE TABLE IF NOT EXISTS settings (
           key TEXT PRIMARY KEY,
           value TEXT NOT NULL
         );
-
         CREATE TABLE IF NOT EXISTS tables (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           number TEXT UNIQUE NOT NULL,
           image TEXT DEFAULT '',
           active INTEGER NOT NULL DEFAULT 1
         );
-
         CREATE TABLE IF NOT EXISTS menu_items (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           name TEXT NOT NULL,
@@ -86,7 +80,6 @@ def init_db():
           image TEXT NOT NULL,
           active INTEGER NOT NULL DEFAULT 1
         );
-
         CREATE TABLE IF NOT EXISTS orders (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           table_number TEXT NOT NULL,
@@ -94,7 +87,6 @@ def init_db():
           total INTEGER NOT NULL,
           created_at TEXT NOT NULL
         );
-
         CREATE TABLE IF NOT EXISTS order_items (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           order_id INTEGER NOT NULL,
@@ -105,18 +97,14 @@ def init_db():
           note TEXT DEFAULT '',
           FOREIGN KEY(order_id) REFERENCES orders(id) ON DELETE CASCADE
         );
-        """
-    )
+    """)
 
     if cur.execute("SELECT COUNT(*) FROM users").fetchone()[0] == 0:
         cur.executemany("INSERT INTO users (username, password, role) VALUES (?, ?, ?)", DEFAULT_USERS)
     if cur.execute("SELECT COUNT(*) FROM tables").fetchone()[0] == 0:
         cur.executemany("INSERT INTO tables (number, image, active) VALUES (?, ?, ?)", DEFAULT_TABLES)
     if cur.execute("SELECT COUNT(*) FROM menu_items").fetchone()[0] == 0:
-        cur.executemany(
-            "INSERT INTO menu_items (name, category, price, description, image) VALUES (?, ?, ?, ?, ?)",
-            DEFAULT_MENU,
-        )
+        cur.executemany("INSERT INTO menu_items (name, category, price, description, image) VALUES (?, ?, ?, ?, ?)", DEFAULT_MENU)
     connection.commit()
     connection.close()
 
@@ -131,26 +119,21 @@ def role_allowed(*roles):
         def wrapper(*args, **kwargs):
             role = session.get("role")
             if role not in roles and role != "admin":
-                return jsonify({"error": "unauthorized"}), 403
+                return jsonify({"error": "غير مصرح"}), 403
             return fn(*args, **kwargs)
-
         return wrapper
-
     return decorator
 
 
 def order_payload(order):
-    items = db().execute(
-        "SELECT menu_item_id AS menuItemId, name, price, qty, note FROM order_items WHERE order_id = ?",
-        (order["id"],),
-    ).fetchall()
+    items = db().execute("SELECT menu_item_id AS menuItemId, name, price, qty, note FROM order_items WHERE order_id = ?", (order["id"],)).fetchall()
     return {
         "id": order["id"],
         "table": order["table_number"],
         "status": order["status"],
         "total": order["total"],
         "createdAt": order["created_at"],
-        "items": [row_dict(item) for item in items],
+        "items": [row_dict(item) for item in items]
     }
 
 
@@ -161,16 +144,13 @@ def index():
 
 @app.get("/api/bootstrap")
 def bootstrap():
-    return jsonify(
-        {
-            "user": {"role": session.get("role"), "username": session.get("username")},
-            "dark": db().execute("SELECT value FROM settings WHERE key = 'dark'").fetchone()["value"]
-            if db().execute("SELECT value FROM settings WHERE key = 'dark'").fetchone()
-            else "false",
-            "menu": [row_dict(r) for r in db().execute("SELECT * FROM menu_items WHERE active = 1 ORDER BY id DESC").fetchall()],
-            "tables": [row_dict(r) for r in db().execute("SELECT * FROM tables WHERE active = 1 ORDER BY CAST(number AS INTEGER), number").fetchall()],
-        }
-    )
+    dark_val = db().execute("SELECT value FROM settings WHERE key = 'dark'").fetchone()
+    return jsonify({
+        "user": {"role": session.get("role"), "username": session.get("username")},
+        "dark": dark_val["value"] if dark_val else "false",
+        "menu": [row_dict(r) for r in db().execute("SELECT * FROM menu_items WHERE active = 1 ORDER BY id DESC").fetchall()],
+        "tables": [row_dict(r) for r in db().execute("SELECT * FROM tables WHERE active = 1 ORDER BY CAST(number AS INTEGER), number").fetchall()],
+    })
 
 
 @app.post("/api/login")
@@ -204,10 +184,7 @@ def orders():
 @app.get("/api/orders/recent")
 def recent_orders():
     table = request.args.get("table", "")
-    rows = db().execute(
-        "SELECT * FROM orders WHERE table_number = ? ORDER BY datetime(created_at) DESC, id DESC LIMIT 4",
-        (table,),
-    ).fetchall()
+    rows = db().execute("SELECT * FROM orders WHERE table_number = ? ORDER BY datetime(created_at) DESC, id DESC LIMIT 4", (table,)).fetchall()
     return jsonify([order_payload(row) for row in rows])
 
 
@@ -220,36 +197,26 @@ def create_order():
     if not table or not active_table or not items:
         return jsonify({"error": "بيانات الطلب غير مكتملة"}), 400
 
-    menu_by_id = {
-        row["id"]: row for row in db().execute("SELECT * FROM menu_items WHERE active = 1").fetchall()
-    }
+    menu_by_id = {row["id"]: row for row in db().execute("SELECT * FROM menu_items WHERE active = 1").fetchall()}
     normalized = []
     for item in items:
         menu_item = menu_by_id.get(int(item.get("id", 0)))
         qty = max(1, int(item.get("qty", 1)))
         if menu_item:
-            normalized.append(
-                {
-                    "menu_item_id": menu_item["id"],
-                    "name": menu_item["name"],
-                    "price": menu_item["price"],
-                    "qty": qty,
-                    "note": str(item.get("note", ""))[:300],
-                }
-            )
+            normalized.append({
+                "menu_item_id": menu_item["id"],
+                "name": menu_item["name"],
+                "price": menu_item["price"],
+                "qty": qty,
+                "note": str(item.get("note", ""))[:300]
+            })
     if not normalized:
         return jsonify({"error": "لا توجد أصناف صالحة"}), 400
 
     total = sum(item["price"] * item["qty"] for item in normalized)
-    cur = db().execute(
-        "INSERT INTO orders (table_number, status, total, created_at) VALUES (?, 'new', ?, ?)",
-        (table, total, datetime.utcnow().isoformat()),
-    )
+    cur = db().execute("INSERT INTO orders (table_number, status, total, created_at) VALUES (?, 'new', ?, ?)", (table, total, datetime.utcnow().isoformat()))
     order_id = cur.lastrowid
-    db().executemany(
-        "INSERT INTO order_items (order_id, menu_item_id, name, price, qty, note) VALUES (?, ?, ?, ?, ?, ?)",
-        [(order_id, i["menu_item_id"], i["name"], i["price"], i["qty"], i["note"]) for i in normalized],
-    )
+    db().executemany("INSERT INTO order_items (order_id, menu_item_id, name, price, qty, note) VALUES (?, ?, ?, ?, ?, ?)", [(order_id, i["menu_item_id"], i["name"], i["price"], i["qty"], i["note"]) for i in normalized])
     db().commit()
     return jsonify(order_payload(db().execute("SELECT * FROM orders WHERE id = ?", (order_id,)).fetchone())), 201
 
@@ -278,16 +245,7 @@ def menu():
 @role_allowed("admin")
 def add_menu_item():
     payload = request.get_json(force=True)
-    cur = db().execute(
-        "INSERT INTO menu_items (name, category, price, description, image) VALUES (?, ?, ?, ?, ?)",
-        (
-            payload.get("name", "").strip(),
-            payload.get("category", "").strip(),
-            int(payload.get("price", 0)),
-            payload.get("description", "").strip(),
-            payload.get("image", "").strip(),
-        ),
-    )
+    cur = db().execute("INSERT INTO menu_items (name, category, price, description, image) VALUES (?, ?, ?, ?, ?)", (payload.get("name", "").strip(), payload.get("category", "").strip(), int(payload.get("price", 0)), payload.get("description", "").strip(), payload.get("image", "").strip()))
     db().commit()
     return jsonify(row_dict(db().execute("SELECT * FROM menu_items WHERE id = ?", (cur.lastrowid,)).fetchone())), 201
 
@@ -304,10 +262,7 @@ def delete_menu_item(item_id):
 @role_allowed("admin")
 def reset_menu():
     db().execute("DELETE FROM menu_items")
-    db().executemany(
-        "INSERT INTO menu_items (name, category, price, description, image) VALUES (?, ?, ?, ?, ?)",
-        DEFAULT_MENU,
-    )
+    db().executemany("INSERT INTO menu_items (name, category, price, description, image) VALUES (?, ?, ?, ?, ?)", DEFAULT_MENU)
     db().commit()
     return menu()
 
@@ -327,10 +282,7 @@ def tables():
 def add_table():
     payload = request.get_json(force=True)
     try:
-        cur = db().execute(
-            "INSERT INTO tables (number, image, active) VALUES (?, ?, ?)",
-            (str(payload.get("number", "")).strip(), payload.get("image", ""), 1 if payload.get("active", True) else 0),
-        )
+        cur = db().execute("INSERT INTO tables (number, image, active) VALUES (?, ?, ?)", (str(payload.get("number", "")).strip(), payload.get("image", ""), 1 if payload.get("active", True) else 0))
         db().commit()
     except sqlite3.IntegrityError:
         return jsonify({"error": "رقم الطاولة موجود مسبقاً"}), 409
@@ -342,15 +294,7 @@ def add_table():
 def update_table(table_id):
     payload = request.get_json(force=True)
     try:
-        db().execute(
-            "UPDATE tables SET number = ?, image = ?, active = ? WHERE id = ?",
-            (
-                str(payload.get("number", "")).strip(),
-                payload.get("image", ""),
-                1 if payload.get("active", True) else 0,
-                table_id,
-            ),
-        )
+        db().execute("UPDATE tables SET number = ?, image = ?, active = ? WHERE id = ?", (str(payload.get("number", "")).strip(), payload.get("image", ""), 1 if payload.get("active", True) else 0, table_id))
         db().commit()
     except sqlite3.IntegrityError:
         return jsonify({"error": "رقم الطاولة موجود مسبقاً"}), 409
@@ -370,25 +314,15 @@ def delete_table(table_id):
 def reports():
     row = db().execute("SELECT COUNT(*) AS totalOrders, COALESCE(SUM(total), 0) AS totalRevenue FROM orders").fetchone()
     completed = db().execute("SELECT COUNT(*) AS c, COALESCE(SUM(total), 0) AS s FROM orders WHERE status = 'delivered'").fetchone()
-    top = db().execute(
-        """
-        SELECT name, SUM(qty) AS qty
-        FROM order_items
-        GROUP BY name
-        ORDER BY qty DESC
-        LIMIT 8
-        """
-    ).fetchall()
+    top = db().execute("SELECT name, SUM(qty) AS qty FROM order_items GROUP BY name ORDER BY qty DESC LIMIT 8").fetchall()
     total_orders = row["totalOrders"]
     revenue = completed["s"] or row["totalRevenue"]
-    return jsonify(
-        {
-            "totalOrders": total_orders,
-            "totalRevenue": revenue,
-            "average": (revenue / total_orders) if total_orders else 0,
-            "topItems": [row_dict(item) for item in top],
-        }
-    )
+    return jsonify({
+        "totalOrders": total_orders,
+        "totalRevenue": revenue,
+        "average": (revenue / total_orders) if total_orders else 0,
+        "topItems": [row_dict(item) for item in top]
+    })
 
 
 @app.get("/api/export")
@@ -406,14 +340,12 @@ def export_data():
 @app.post("/api/settings/dark")
 def set_dark():
     value = "true" if request.get_json(force=True).get("dark") else "false"
-    db().execute(
-        "INSERT INTO settings (key, value) VALUES ('dark', ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value",
-        (value,),
-    )
+    db().execute("INSERT INTO settings (key, value) VALUES ('dark', ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value", (value,))
     db().commit()
     return jsonify({"ok": True})
 
 
 if __name__ == "__main__":
     init_db()
-    app.run(host="0.0.0.0", port=5000, debug=False)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=False)
