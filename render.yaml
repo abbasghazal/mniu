@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: restaurant-menu
+    runtime: python
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn server:app
+    healthCheckPath: /healthz
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.5
+      - key: RESTAURANT_SECRET
+        generateValue: true
+      - key: RESTAURANT_DB_PATH
+        value: /var/data/restaurant.db
+    disk:
+      name: restaurant-data
+      mountPath: /var/data
+      sizeGB: 1
