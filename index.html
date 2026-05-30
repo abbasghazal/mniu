@@ -55,8 +55,8 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  // تكوين API - يتغير تلقائياً حسب البيئة
-  const API_BASE = window.location.origin;
+  // ✅ الإصلاح: تحديد عنوان API تلقائياً من عنوان المتصفح الحالي
+  const API_BASE = window.location.origin;  // هذا يحل المشكلة تماماً
   
   let state = {
     view: "customer",
@@ -68,12 +68,12 @@
     menu: [],
     tables: [],
     orders: [],
+    reports: {},
     dark: localStorage.getItem("med_dark") === "true"
   };
   
   const statusLabels = { new: "جديد", confirmed: "تم الاستلام", preparing: "قيد التحضير", ready: "جاهز", delivered: "تم التوصيل" };
   
-  // دوال مساعدة
   const $ = id => document.getElementById(id);
   function formatPrice(v) { return `${Number(v || 0).toLocaleString("ar-IQ")} د.ع`; }
   
@@ -85,7 +85,6 @@
     toast.timer = setTimeout(() => t.classList.remove("show"), 2500);
   }
   
-  // دوال API
   async function api(path, options = {}) {
     try {
       const res = await fetch(`${API_BASE}${path}`, {
@@ -107,12 +106,16 @@
   
   async function bootstrap() {
     try {
+      toast("⏳ جاري الاتصال بالخادم...");
       const data = await api("/api/bootstrap");
       state.role = data.user?.role || null;
       state.username = data.user?.username || null;
       state.menu = data.menu || [];
       state.tables = data.tables || [];
-      if (!state.tables.some(t => t.number === state.table)) {
+      if (state.tables.length === 0) {
+        state.tables = [{ id: "1", number: "1", image: "", active: true }];
+      }
+      if (!state.tables.some(t => t.number === state.table && t.active)) {
         let active = state.tables.find(t => t.active);
         if (active) state.table = active.number;
       }
@@ -120,9 +123,14 @@
       await refreshReports();
       render();
       startPolling();
+      toast("✅ تم الاتصال بالخادم بنجاح");
     } catch (err) {
       toast("⚠️ لا يمكن الاتصال بالخادم. تأكد من تشغيل الخادم.");
       console.error(err);
+      // عرض رسالة واضحة للمستخدم
+      setTimeout(() => {
+        toast(`⚠️ الخادم: ${API_BASE} غير متاح. تأكد من أن التطبيق يعمل على Render.`);
+      }, 1000);
     }
   }
   
@@ -136,8 +144,7 @@
   
   async function refreshReports() {
     if (canStaff()) {
-      const reports = await api("/api/reports");
-      state.reports = reports;
+      state.reports = await api("/api/reports");
     }
   }
   
@@ -166,7 +173,6 @@
     render();
   }
   
-  // العمليات الأساسية
   async function submitOrder() {
     let items = Object.values(state.cart);
     if (items.length === 0) return toast("❌ أضف أصنافاً أولاً");
@@ -257,7 +263,6 @@
     render();
   }
   
-  // ========== دوال العرض ==========
   function render() {
     applyAuth();
     applyTheme();
@@ -282,10 +287,10 @@
   }
   
   function renderCategories() {
-    let categories = ["المقبلات", "الأطباق الرئيسية", "المشروبات", "الحلويات"];
+    let categoriesList = ["المقبلات", "الأطباق الرئيسية", "المشروبات", "الحلويات"];
     let container = $("categoryTabs");
     if (container) {
-      container.innerHTML = categories.map(c => `<button class="chip ${state.category === c ? "active" : ""}" data-cat="${c}">${c}</button>`).join("");
+      container.innerHTML = categoriesList.map(c => `<button class="chip ${state.category === c ? "active" : ""}" data-cat="${c}">${c}</button>`).join("");
     }
   }
   
@@ -388,7 +393,6 @@
     w.document.close();
   }
   
-  // ========== أحداث المستخدم ==========
   function setupEventListeners() {
     $("tableSelect")?.addEventListener("change", async (e) => {
       state.table = e.target.value;
@@ -451,7 +455,6 @@
     });
   }
   
-  // ========== أحداث النقر الديناميكية ==========
   document.addEventListener("click", (e) => {
     let tab = e.target.closest("[data-view]");
     if (tab) { setView(tab.dataset.view); return; }
@@ -495,7 +498,6 @@
     }
   });
   
-  // ========== تسجيل الدخول ==========
   $("loginBtn").onclick = async () => {
     let pwd = prompt("🔐 كلمة المرور:\n\nadmin123 → مدير\ncashier123 → كاشير\nkitchen123 → مطبخ");
     if (!pwd) return;
@@ -526,7 +528,6 @@
     } catch (err) { toast(err.message); }
   };
   
-  // ========== التحديث التلقائي ==========
   let pollingInterval;
   function startPolling() {
     if (pollingInterval) clearInterval(pollingInterval);
@@ -543,7 +544,6 @@
     }, 5000);
   }
   
-  // ========== قراءة رقم الطاولة من الرابط ==========
   function initTableFromUrl() {
     let urlParams = new URLSearchParams(window.location.search);
     let tableParam = urlParams.get("table");
@@ -552,7 +552,6 @@
     }
   }
   
-  // ========== بدء التشغيل ==========
   initTableFromUrl();
   setupEventListeners();
   bootstrap();
