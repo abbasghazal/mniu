@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: restaurant-menu
+    runtime: python
+    buildCommand: ""
+    startCommand: gunicorn server:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: RESTAURANT_SECRET
+        generateValue: true
