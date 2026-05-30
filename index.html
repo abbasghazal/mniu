@@ -10,94 +10,556 @@
     *{box-sizing:border-box} body{margin:0;min-height:100vh;font-family:Tahoma,Arial,sans-serif;color:var(--ink);background:var(--paper)} button,input,textarea,select{font:inherit} button{border:0;cursor:pointer} img{display:block;width:100%;height:100%;object-fit:cover}
     .app-shell{min-height:100vh;display:grid;grid-template-rows:auto 1fr}.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px clamp(14px,4vw,34px);background:rgba(251,250,246,.94);border-bottom:1px solid var(--line);backdrop-filter:blur(14px)}body.dark .topbar{background:rgba(17,24,39,.94)}
     .brand{display:flex;align-items:center;gap:10px;min-width:0}.brand-mark{width:38px;height:38px;display:grid;place-items:center;border-radius:8px;color:#fff;background:var(--brand);font-weight:800}.brand-title{display:grid;gap:2px}.brand-title strong{font-size:16px;white-space:nowrap}.brand-title span,.order-meta,.desc,.field label,.admin-row p,.qr-link{color:var(--muted)}
-    .top-actions,.nav-tabs,.toolbar-buttons,.category-tabs{display:flex;align-items:center;gap:8px}.nav-tabs{overflow-x:auto;padding-bottom:1px}.tab,.chip{min-height:38px;padding:0 14px;border-radius:8px;color:var(--ink);background:transparent;border:1px solid transparent;white-space:nowrap}.tab.active{color:#fff;background:var(--brand);border-color:var(--brand)}.chip{border-color:var(--line);background:var(--panel)}.chip.active{color:#fff;border-color:var(--accent);background:var(--accent)}
-    .page{display:none}.page.active{display:block}.hero{min-height:34vh;display:grid;align-items:end;padding:clamp(28px,7vw,72px) clamp(16px,5vw,58px);color:#fff;background:linear-gradient(90deg,rgba(16,24,28,.82),rgba(16,24,28,.28)),url("https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1800&q=80") center/cover}.hero-content{max-width:760px}.hero h1{margin:0 0 12px;font-size:clamp(34px,6vw,76px);line-height:1.02;letter-spacing:0}.hero p{margin:0;max-width:620px;color:rgba(255,255,255,.88);font-size:clamp(15px,2vw,20px);line-height:1.8}
-    .main-grid{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:22px;width:min(1240px,calc(100% - 28px));margin:22px auto 42px;align-items:start}.menu-tools,.orders-toolbar,.admin-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}.section-title{margin:0;font-size:20px}.menu-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .top-actions,.nav-tabs,.toolbar-buttons,.category-tabs{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.nav-tabs{overflow-x:auto;padding-bottom:1px}.tab,.chip{min-height:38px;padding:0 14px;border-radius:8px;color:var(--ink);background:transparent;border:1px solid transparent;white-space:nowrap}.tab.active{color:#fff;background:var(--brand);border-color:var(--brand)}.chip{border-color:var(--line);background:var(--panel)}.chip.active{color:#fff;border-color:var(--accent);background:var(--accent)}
+    .page{display:none}.page.active{display:block}.hero{min-height:34vh;display:grid;align-items:end;padding:clamp(28px,7vw,72px) clamp(16px,5vw,58px);color:#fff;background:linear-gradient(90deg,rgba(16,24,28,.82),rgba(16,24,28,.28)),url("https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1800&q=80") center/cover}.hero-content{max-width:760px}.hero h1{margin:0 0 12px;font-size:clamp(34px,6vw,76px);line-height:1.02}.hero p{margin:0;max-width:620px;color:rgba(255,255,255,.88);font-size:clamp(15px,2vw,20px);line-height:1.8}
+    .main-grid{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:22px;width:min(1240px,calc(100% - 28px));margin:22px auto 42px;align-items:start}.menu-tools,.orders-toolbar,.admin-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap}.section-title{margin:0;font-size:20px}.menu-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
     .item-card,.order-card,.metric-card,.report-panel,.qr-card,.form-panel,.admin-list,.cart{border:1px solid var(--line);border-radius:8px;background:var(--panel);box-shadow:0 10px 30px rgba(20,33,41,.06)}.item-card{display:grid;grid-template-columns:126px minmax(0,1fr);min-height:148px;overflow:hidden}.item-media{min-height:148px;background:#d8e4df}.item-body{display:grid;grid-template-rows:auto 1fr auto;gap:8px;padding:12px;min-width:0}.item-title-row,.line-head,.total-row,.order-head,.table-order-line{display:flex;justify-content:space-between;gap:10px}.item-title-row h3,.admin-row h3{margin:0;font-size:17px;line-height:1.35}.price{color:var(--accent);font-weight:800;white-space:nowrap}.desc{margin:0;font-size:13px;line-height:1.65}.item-actions{display:flex;align-items:center;justify-content:space-between;gap:10px}.qty{display:grid;grid-template-columns:34px 34px 34px;align-items:center;overflow:hidden;border:1px solid var(--line);border-radius:8px;background:var(--panel)}.qty button{height:34px;background:rgba(127,127,127,.12);font-weight:800}.qty span{text-align:center;font-weight:700}
-    .primary-btn,.ghost-btn,.danger-btn,.add-note{min-height:40px;padding:0 14px;border-radius:8px;font-weight:700}.primary-btn,.add-note{color:#fff;background:var(--brand)}.primary-btn:hover,.add-note:hover{background:var(--brand-dark)}.ghost-btn{color:var(--brand-dark);background:var(--soft);border:1px solid #c9ebe5}.danger-btn{color:#fff;background:#b91c1c}.primary-btn:disabled{cursor:not-allowed;opacity:.55}
-    .cart{position:sticky;top:82px;display:grid;gap:14px;padding:16px;box-shadow:var(--shadow)}.cart h2{margin:0;font-size:20px}.cart-empty{margin:0;color:var(--muted);line-height:1.7}.cart-lines,.table-orders,.admin-list,.form-panel{display:grid;gap:10px}.cart-line,.order-items li{display:grid;gap:8px;padding:10px;border:1px solid var(--line);border-radius:8px;background:rgba(127,127,127,.06)}.note-input,.field input,.field textarea,.field select{min-height:40px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink)}.total-row{align-items:center;padding-top:12px;border-top:1px solid var(--line);font-size:18px;font-weight:800}.table-badge{display:grid;grid-template-columns:46px auto;align-items:center;gap:8px;min-height:48px;padding:5px 12px;border-radius:8px;color:var(--brand-dark);background:var(--soft);border:1px solid #c9ebe5;font-weight:700}.table-badge img{width:40px;height:40px;border-radius:8px;background:#ddd}.table-order-line{align-items:center;padding:8px;border-radius:8px;background:rgba(127,127,127,.07);font-size:13px}
-    .workspace{width:min(1240px,calc(100% - 28px));margin:24px auto 42px}.orders-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.order-card{display:grid;gap:12px;padding:14px}.order-head{align-items:start;padding-bottom:10px;border-bottom:1px solid var(--line)}.order-head strong{font-size:18px}.status{display:inline-flex;align-items:center;min-height:28px;padding:0 9px;border-radius:999px;font-size:12px;font-weight:800;white-space:nowrap}.status.new{color:#7c2d12;background:#ffedd5}.status.confirmed{color:#075985;background:#e0f2fe}.status.preparing{color:#854d0e;background:#fef3c7}.status.ready{color:#166534;background:#dcfce7}.status.delivered{color:#4b5563;background:#f3f4f6}.order-items{margin:0;padding:0;list-style:none;display:grid;gap:8px}.order-items small{color:var(--muted);line-height:1.5}.status-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.status-actions button{min-height:36px;border-radius:8px;background:rgba(127,127,127,.13);color:var(--ink);font-weight:700}.kitchen-board{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.kitchen-card{border:2px solid #f0c36a;background:var(--panel)}
-    .admin-layout,.tables-layout{display:grid;grid-template-columns:360px minmax(0,1fr);gap:18px;align-items:start}.reports-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:18px}.metric-card,.report-panel,.qr-card,.form-panel,.admin-list{display:grid;gap:10px;padding:16px}.metric-card span{color:var(--muted);font-size:13px;font-weight:700}.metric-card strong{font-size:clamp(26px,4vw,42px);line-height:1.15}.report-layout{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:18px;align-items:start}.top-items{display:grid;gap:10px;margin:0;padding:0;list-style:none}.top-items li{display:grid;grid-template-columns:minmax(0,1fr) 80px;gap:10px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:8px;background:rgba(127,127,127,.05)}.bar{height:9px;overflow:hidden;border-radius:999px;background:#dbe4ea}.bar i{display:block;height:100%;border-radius:inherit;background:var(--accent)}.qr-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.qr-card{justify-items:center;text-align:center}.qr-box{width:132px;aspect-ratio:1;border:8px solid #fff;background:#fff}.qr-box img{object-fit:contain}.qr-link{direction:ltr;font-size:11px;overflow-wrap:anywhere}
-    .field{display:grid;gap:6px}.field label{font-size:13px;font-weight:700}.admin-row{display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:8px}.admin-thumb{width:72px;height:60px;overflow:hidden;border-radius:8px;background:#d8e4df}.admin-row p{margin:0;font-size:13px}.table-edit{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:center}.toast{position:fixed;inset-inline:18px;bottom:18px;z-index:40;display:none;width:min(460px,calc(100% - 36px));margin-inline-start:auto;padding:14px 16px;border-radius:8px;color:#fff;background:#111827;box-shadow:var(--shadow);line-height:1.7}.toast.show{display:block}.empty-state{padding:28px;border:1px dashed #b9c4cc;border-radius:8px;color:var(--muted);background:var(--panel);text-align:center;line-height:1.8}.hidden{display:none!important}
-    @media print{.topbar,.hero,.cart,.toolbar-buttons,.admin-toolbar,.menu-tools,.category-tabs,.toast{display:none!important}body{background:#fff;color:#000}.page{display:none!important}.page.active{display:block!important}.workspace,.main-grid{width:100%;margin:0}.order-card,.metric-card,.report-panel,.qr-card{break-inside:avoid;box-shadow:none}}
-    @media(max-width:1000px){.main-grid,.admin-layout,.tables-layout,.report-layout{grid-template-columns:1fr}.cart{position:static}.orders-grid,.kitchen-board,.reports-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-    @media(max-width:720px){.topbar{align-items:stretch;flex-direction:column}.top-actions{justify-content:space-between}.menu-tools,.orders-toolbar,.admin-toolbar{align-items:stretch;flex-direction:column}.menu-list,.orders-grid,.kitchen-board,.reports-grid,.qr-grid{grid-template-columns:1fr}.item-card{grid-template-columns:112px minmax(0,1fr)}.item-media{min-height:160px}.admin-row,.table-edit{grid-template-columns:1fr}.admin-thumb{width:100%;height:140px}}
+    .primary-btn,.ghost-btn,.danger-btn,.add-note{min-height:40px;padding:0 14px;border-radius:8px;font-weight:700;cursor:pointer}.primary-btn,.add-note{color:#fff;background:var(--brand)}.primary-btn:hover,.add-note:hover{background:var(--brand-dark)}.ghost-btn{color:var(--brand-dark);background:var(--soft);border:1px solid #c9ebe5}.danger-btn{color:#fff;background:#b91c1c}.primary-btn:disabled{cursor:not-allowed;opacity:.55}
+    .cart{position:sticky;top:82px;display:grid;gap:14px;padding:16px}.cart h2{margin:0;font-size:20px}.cart-empty{margin:0;color:var(--muted);line-height:1.7}.cart-lines,.table-orders,.admin-list,.form-panel{display:grid;gap:10px}.cart-line,.order-items li{display:grid;gap:8px;padding:10px;border:1px solid var(--line);border-radius:8px;background:rgba(127,127,127,.06)}.note-input,.field input,.field textarea,.field select{min-height:40px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink)}.total-row{align-items:center;padding-top:12px;border-top:1px solid var(--line);font-size:18px;font-weight:800}.table-badge{display:grid;grid-template-columns:46px auto;align-items:center;gap:8px;min-height:48px;padding:5px 12px;border-radius:8px;color:var(--brand-dark);background:var(--soft);border:1px solid #c9ebe5;font-weight:700}.table-badge img{width:40px;height:40px;border-radius:8px;background:#ddd}.table-order-line{align-items:center;padding:8px;border-radius:8px;background:rgba(127,127,127,.07);font-size:13px}
+    .workspace{width:min(1240px,calc(100% - 28px));margin:24px auto 42px}.orders-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}.order-card{display:grid;gap:12px;padding:14px}.order-head{align-items:start;padding-bottom:10px;border-bottom:1px solid var(--line)}.order-head strong{font-size:18px}.status{display:inline-flex;align-items:center;min-height:28px;padding:0 9px;border-radius:999px;font-size:12px;font-weight:800;white-space:nowrap}.status.new{color:#7c2d12;background:#ffedd5}.status.confirmed{color:#075985;background:#e0f2fe}.status.preparing{color:#854d0e;background:#fef3c7}.status.ready{color:#166534;background:#dcfce7}.status.delivered{color:#4b5563;background:#f3f4f6}.order-items{margin:0;padding:0;list-style:none;display:grid;gap:8px}.order-items small{color:var(--muted);line-height:1.5}.status-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.status-actions button{min-height:36px;border-radius:8px;background:rgba(127,127,127,.13);color:var(--ink);font-weight:700;cursor:pointer}.kitchen-board{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}.kitchen-card{border:2px solid #f0c36a}
+    .admin-layout,.tables-layout{display:grid;grid-template-columns:360px minmax(0,1fr);gap:18px;align-items:start}@media(max-width:900px){.admin-layout,.tables-layout{grid-template-columns:1fr}}.reports-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:18px}.metric-card,.report-panel,.qr-card,.form-panel,.admin-list{display:grid;gap:10px;padding:16px}.metric-card span{color:var(--muted);font-size:13px;font-weight:700}.metric-card strong{font-size:clamp(26px,4vw,42px);line-height:1.15}.report-layout{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:18px;align-items:start}@media(max-width:800px){.report-layout{grid-template-columns:1fr}}.top-items{display:grid;gap:10px;margin:0;padding:0;list-style:none}.top-items li{display:grid;grid-template-columns:minmax(0,1fr) 80px;gap:10px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:8px;background:rgba(127,127,127,.05)}.bar{height:9px;overflow:hidden;border-radius:999px;background:#dbe4ea}.bar i{display:block;height:100%;border-radius:inherit;background:var(--accent)}.qr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}.qr-card{justify-items:center;text-align:center}.qr-box{width:120px;aspect-ratio:1;border:4px solid #fff;background:#fff}.qr-box img{width:100%;height:100%;object-fit:contain}.qr-link{direction:ltr;font-size:10px;overflow-wrap:anywhere;word-break:break-all}
+    .field{display:grid;gap:6px}.field label{font-size:13px;font-weight:700}.admin-row{display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:8px}@media(max-width:600px){.admin-row{grid-template-columns:1fr}}.admin-thumb{width:72px;height:60px;overflow:hidden;border-radius:8px;background:#d8e4df}.admin-row p{margin:0;font-size:13px}.table-edit{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:center}@media(max-width:500px){.table-edit{grid-template-columns:1fr}}.toast{position:fixed;inset-inline:18px;bottom:18px;z-index:40;display:none;width:min(460px,calc(100% - 36px));margin-inline-start:auto;padding:14px 16px;border-radius:8px;color:#fff;background:#111827;box-shadow:0 10px 30px rgba(0,0,0,.2);line-height:1.7}.toast.show{display:block}.empty-state{padding:28px;border:1px dashed #b9c4cc;border-radius:8px;color:var(--muted);background:var(--panel);text-align:center;line-height:1.8}.hidden{display:none!important}
+    @media print{.topbar,.hero,.cart,.toolbar-buttons,.admin-toolbar,.menu-tools,.category-tabs,.toast,.status-actions{display:none!important}body{background:#fff;color:#000}.page{display:none!important}.page.active{display:block!important}.workspace,.main-grid{width:100%;margin:0}.order-card,.metric-card,.report-panel,.qr-card{break-inside:avoid;box-shadow:none}}
+    @media(max-width:720px){.topbar{align-items:stretch;flex-direction:column}.top-actions{justify-content:space-between}.menu-list{grid-template-columns:1fr}.item-card{grid-template-columns:100px minmax(0,1fr)}}
   </style>
 </head>
 <body>
-  <div class="app-shell">
-    <header class="topbar">
-      <div class="brand"><div class="brand-mark">M</div><div class="brand-title"><strong>منيو المطعم المتوسط</strong><span id="roleLabel">وضع الزبون</span></div></div>
-      <nav class="nav-tabs" id="navTabs">
-        <button class="tab active" data-view="customer">الزبون</button><button class="tab auth" data-view="cashier">الكاشير</button><button class="tab auth" data-view="kitchen">المطبخ</button><button class="tab admin-only" data-view="admin">إدارة المنيو</button><button class="tab admin-only" data-view="tables">الطاولات</button><button class="tab auth" data-view="reports">التقارير</button>
-      </nav>
-      <div class="top-actions"><button class="ghost-btn" id="loginBtn">دخول المدير</button><button class="ghost-btn hidden" id="logoutBtn">تسجيل خروج</button></div>
-    </header>
-    <main>
-      <section id="customer" class="page active">
-        <div class="hero"><div class="hero-content"><h1>اطلب من طاولتك مباشرة</h1><p>اختر الأصناف، عدل الكميات، أضف ملاحظاتك، وسيصل الطلب إلى الكاشير مرتبطاً برقم الطاولة.</p></div></div>
-        <div class="main-grid">
-          <section><div class="menu-tools"><h2 class="section-title">قائمة الطعام</h2><div class="field"><select id="tableSelect"></select></div><div class="table-badge" id="tableBadge"></div></div><div class="category-tabs" id="categoryTabs"></div><div class="menu-list" id="menuList"></div></section>
-          <aside class="cart"><h2>طلبك الحالي</h2><div id="cartLines" class="cart-lines"></div><p id="cartEmpty" class="cart-empty">لم تختر أي صنف بعد.</p><div class="total-row"><span>الإجمالي</span><span id="cartTotal">0 د.ع</span></div><button class="primary-btn" id="submitOrder" disabled>إرسال الطلب</button><button class="ghost-btn" id="clearCart">تفريغ السلة</button><div class="table-orders"><h3 class="section-title">طلبات هذه الطاولة</h3><div id="customerOrders"></div></div></aside>
-        </div>
-      </section>
-      <section id="cashier" class="page"><div class="workspace"><div class="orders-toolbar"><div><h2 class="section-title">لوحة الكاشير</h2><div class="order-meta">كل طلب يظهر مع رقم الطاولة والوقت والتفاصيل.</div></div><div class="toolbar-buttons"><button class="ghost-btn" id="enableNotifications">تفعيل الإشعارات</button><button class="ghost-btn" id="seedDemo">إضافة طلب تجريبي</button></div></div><div class="orders-grid" id="cashierOrders"></div></div></section>
-      <section id="kitchen" class="page"><div class="workspace"><div class="orders-toolbar"><div><h2 class="section-title">شاشة المطبخ</h2><div class="order-meta">تظهر هنا الطلبات المؤكدة أو قيد التحضير فقط.</div></div><button class="ghost-btn" id="printKitchen">طباعة الطلبات</button></div><div class="kitchen-board" id="kitchenOrders"></div></div></section>
-      <section id="admin" class="page"><div class="workspace"><div class="admin-toolbar"><div><h2 class="section-title">إدارة المنيو المركزي</h2><div class="order-meta">أي صنف تضيفه أو تحذفه يظهر مباشرة في صفحة الزبون.</div></div><button class="ghost-btn" id="resetMenu">استرجاع المنيو الأساسي</button></div><div class="admin-layout"><form class="form-panel" id="menuForm"><div class="field"><label for="itemName">اسم الصنف</label><input id="itemName" required></div><div class="field"><label for="itemCategory">القسم</label><select id="itemCategory" required><option>المقبلات</option><option>الأطباق الرئيسية</option><option>المشروبات</option><option>الحلويات</option></select></div><div class="field"><label for="itemPrice">السعر بالدينار</label><input id="itemPrice" type="number" min="250" step="250" required></div><div class="field"><label for="itemImage">رابط الصورة</label><input id="itemImage" required></div><div class="field"><label for="itemDesc">وصف مختصر</label><textarea id="itemDesc" rows="3" required></textarea></div><button class="primary-btn" type="submit">إضافة الصنف</button></form><div class="admin-list" id="adminList"></div></div></div></section>
-      <section id="tables" class="page"><div class="workspace"><div class="admin-toolbar"><div><h2 class="section-title">إدارة الطاولات والصور</h2><div class="order-meta">يمكن حفظ الصور المحلية داخل قاعدة البيانات بصيغة Base64.</div></div></div><div class="tables-layout"><form class="form-panel" id="tableForm"><div class="field"><label>رقم الطاولة</label><input id="tableNumber" required></div><div class="field"><label>رابط صورة</label><input id="tableImageUrl"></div><div class="field"><label>رفع صورة محلية</label><input id="tableImageFile" type="file" accept="image/*"></div><label><input id="tableActive" type="checkbox" checked> الطاولة فعالة</label><button class="primary-btn" type="submit">إضافة طاولة</button></form><div class="admin-list" id="tablesList"></div></div></div></section>
-      <section id="reports" class="page"><div class="workspace"><div class="orders-toolbar"><div><h2 class="section-title">التقارير والمالك</h2><div class="order-meta">إحصائيات فورية، أكواد QR للطاولات، وخيارات التصدير.</div></div><div class="toolbar-buttons"><button class="ghost-btn" id="toggleDark">الوضع المظلم</button><button class="ghost-btn" id="syncData">نسخ احتياطي JSON</button><button class="primary-btn" id="exportPdf">تصدير PDF</button></div></div><div class="reports-grid"><div class="metric-card"><span>إجمالي الطلبات</span><strong id="statOrders">0</strong></div><div class="metric-card"><span>إجمالي الإيرادات</span><strong id="statRevenue">0 د.ع</strong></div><div class="metric-card"><span>متوسط قيمة الطلب</span><strong id="statAverage">0 د.ع</strong></div></div><div class="report-layout"><section class="report-panel"><h3 class="section-title">الأصناف الأكثر طلباً</h3><ul class="top-items" id="topItems"></ul></section><aside class="report-panel"><h3 class="section-title">توليد QR للطاولات</h3><div class="field"><label>رابط الموقع الأساسي</label><input id="publicBaseUrl" dir="ltr"></div><div class="field"><label>عدد الطاولات</label><input id="tableCount" type="number" min="1" max="80" value="12"></div><button class="ghost-btn" id="generateQr">توليد الأكواد</button><button class="ghost-btn" id="printQr">طباعة الأكواد</button><div class="qr-grid" id="qrGrid"></div></aside></div></div></section>
-    </main>
-  </div>
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script>
-    const API_BASE=location.protocol==="file:"?"http://localhost:5000":"";
-    const categories=["المقبلات","الأطباق الرئيسية","المشروبات","الحلويات"];
-    const statusLabels={new:"جديد",confirmed:"تم الاستلام",preparing:"قيد التحضير",ready:"جاهز",delivered:"تم التوصيل"};
-    const state={view:"customer",role:null,username:null,category:categories[0],table:getTableFromUrl(),cart:{},menu:[],tables:[],orders:[],reports:{totalOrders:0,totalRevenue:0,average:0,topItems:[]},dark:localStorage.getItem("med-dark")==="true",lastOrderId:0};
-    const $=id=>document.getElementById(id);
-    const els={pages:document.querySelectorAll(".page"),tabs:document.querySelectorAll(".tab"),authTabs:document.querySelectorAll(".auth"),adminTabs:document.querySelectorAll(".admin-only"),roleLabel:$("roleLabel"),loginBtn:$("loginBtn"),logoutBtn:$("logoutBtn"),tableSelect:$("tableSelect"),tableBadge:$("tableBadge"),categoryTabs:$("categoryTabs"),menuList:$("menuList"),cartLines:$("cartLines"),cartEmpty:$("cartEmpty"),customerOrders:$("customerOrders"),cartTotal:$("cartTotal"),submitOrder:$("submitOrder"),cashierOrders:$("cashierOrders"),kitchenOrders:$("kitchenOrders"),adminList:$("adminList"),tablesList:$("tablesList"),toast:$("toast")};
-    function getTableFromUrl(){const t=new URLSearchParams(location.search).get("table");return t&&/^[0-9]{1,4}$/.test(t)?t:"1"}
-    async function api(path,opts={}){let res;try{res=await fetch(`${API_BASE}${path}`,{credentials:"include",headers:{"Content-Type":"application/json",...(opts.headers||{})},...opts})}catch{throw new Error("تعذر الاتصال بالخادم. شغّل start.bat ثم افتح http://localhost:5000")};if(!res.ok){let msg="حدث خطأ";try{msg=(await res.json()).error||msg}catch{}throw new Error(msg)}return res.headers.get("content-type")?.includes("json")?res.json():res.text()}
-    function formatPrice(v){return `${Number(v||0).toLocaleString("ar-IQ")} د.ع`}
-    function toast(msg){els.toast.textContent=msg;els.toast.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>els.toast.classList.remove("show"),2800)}
-    function canStaff(){return ["admin","cashier","kitchen"].includes(state.role)} function canAdmin(){return state.role==="admin"}
-    function applyAuth(){els.authTabs.forEach(t=>t.classList.toggle("hidden",!canStaff()));els.adminTabs.forEach(t=>t.classList.toggle("hidden",!canAdmin()));els.loginBtn.classList.toggle("hidden",canStaff());els.logoutBtn.classList.toggle("hidden",!canStaff());els.roleLabel.textContent=state.role?`دخول: ${state.role}`:"وضع الزبون";if(!canStaff()&&state.view!=="customer")setView("customer");if(!canAdmin()&&["admin","tables"].includes(state.view))setView("customer")}
-    function applyTheme(){document.body.classList.toggle("dark",state.dark);$("toggleDark").textContent=state.dark?"الوضع الفاتح":"الوضع المظلم"}
-    async function bootstrap(){const data=await api("/api/bootstrap");state.role=data.user.role;state.username=data.user.username;state.dark=localStorage.getItem("med-dark")!==null?state.dark:data.dark==="true";state.menu=data.menu;state.tables=data.tables;if(!state.tables.some(t=>t.number===state.table))state.table=state.tables[0]?.number||"1";await refreshOrders();await refreshReports();render();poll()}
-    async function refreshOrders(){if(canStaff())state.orders=await api("/api/orders");else state.orders=await api(`/api/orders/recent?table=${encodeURIComponent(state.table)}`)}
-    async function refreshReports(){if(canStaff())state.reports=await api("/api/reports")}
-    function setView(view){if((["cashier","kitchen","reports"].includes(view)&&!canStaff())||(["admin","tables"].includes(view)&&!canAdmin())){toast("هذه الصفحة تحتاج تسجيل دخول.");view="customer"}state.view=view;els.pages.forEach(p=>p.classList.toggle("active",p.id===view));els.tabs.forEach(t=>t.classList.toggle("active",t.dataset.view===view));render()}
-    function render(){applyAuth();applyTheme();renderTablesSelect();renderCategories();renderMenu();renderCart();renderOrders();renderAdmin();renderTablesAdmin();renderReports();renderQrCodes(false)}
-    function renderTablesSelect(){const activeTables=state.tables.filter(t=>t.active);if(activeTables.length&&!activeTables.some(t=>t.number===state.table))state.table=activeTables[0].number;els.tableSelect.innerHTML=activeTables.map(t=>`<option value="${t.number}" ${t.number===state.table?"selected":""}>طاولة ${t.number}</option>`).join("");const table=activeTables.find(t=>t.number===state.table)||{};els.tableBadge.innerHTML=`${table.image?`<img src="${table.image}" alt="">`:`<span></span>`}<span>الطاولة ${state.table}</span>`}
-    function renderCategories(){els.categoryTabs.innerHTML=categories.map(c=>`<button class="chip ${state.category===c?"active":""}" data-category="${c}">${c}</button>`).join("")}
-    function renderMenu(){const items=state.menu.filter(i=>i.category===state.category);els.menuList.innerHTML=items.length?items.map(i=>{const q=state.cart[i.id]?.qty||0;return `<article class="item-card"><div class="item-media"><img src="${i.image}" alt="${i.name}"></div><div class="item-body"><div class="item-title-row"><h3>${i.name}</h3><span class="price">${formatPrice(i.price)}</span></div><p class="desc">${i.description}</p><div class="item-actions"><div class="qty"><button data-dec="${i.id}">-</button><span>${q}</span><button data-inc="${i.id}">+</button></div><button class="add-note" data-inc="${i.id}">إضافة</button></div></div></article>`}).join(""):`<div class="empty-state">لا توجد أصناف في هذا القسم.</div>`}
-    function renderCart(){const lines=Object.values(state.cart);els.cartEmpty.style.display=lines.length?"none":"block";els.submitOrder.disabled=!lines.length;els.cartLines.innerHTML=lines.map(l=>`<div class="cart-line"><div class="line-head"><span>${l.name} × ${l.qty}</span><span>${formatPrice(l.price*l.qty)}</span></div><textarea class="note-input" data-note="${l.id}" rows="2" placeholder="ملاحظة مثل: بدون ملح">${l.note||""}</textarea></div>`).join("");els.cartTotal.textContent=formatPrice(lines.reduce((s,l)=>s+l.price*l.qty,0))}
-    function orderCard(o,kitchen=false){const buttons=kitchen?`<button data-status="${o.id}:ready">جاهز</button>`:`<button data-status="${o.id}:confirmed">استلام</button><button data-status="${o.id}:preparing">تحضير</button><button data-status="${o.id}:ready">جاهز</button><button data-status="${o.id}:delivered">توصيل</button>`;return `<article class="order-card ${kitchen?"kitchen-card":""}"><div class="order-head"><div><strong>طاولة ${o.table}</strong><div class="order-meta">${new Date(o.createdAt).toLocaleString("ar-IQ")}</div></div><span class="status ${o.status}">${statusLabels[o.status]}</span></div><ul class="order-items">${o.items.map(i=>`<li><strong>${i.name} × ${i.qty}</strong><small>${i.note?`ملاحظة: ${i.note}`:"بدون ملاحظات"}</small></li>`).join("")}</ul><div class="total-row"><span>المجموع</span><span>${formatPrice(o.total)}</span></div><div class="status-actions">${buttons}</div>${kitchen?"":`<button class="ghost-btn" data-print-order="${o.id}">طباعة الفاتورة</button>`}</article>`}
-    function renderOrders(){els.cashierOrders.innerHTML=state.orders.length?state.orders.map(o=>orderCard(o)).join(""):`<div class="empty-state">لا توجد طلبات واردة حالياً.</div>`;const k=state.orders.filter(o=>["confirmed","preparing"].includes(o.status));els.kitchenOrders.innerHTML=k.length?k.map(o=>orderCard(o,true)).join(""):`<div class="empty-state">لا توجد طلبات مرسلة للمطبخ الآن.</div>`;const tableOrders=(canStaff()?state.orders.filter(o=>o.table===state.table):state.orders).slice(0,4);els.customerOrders.innerHTML=tableOrders.length?tableOrders.map(o=>`<div class="table-order-line"><span>${new Date(o.createdAt).toLocaleTimeString("ar-IQ",{hour:"2-digit",minute:"2-digit"})}</span><span class="status ${o.status}">${statusLabels[o.status]}</span></div>`).join(""):`<p class="cart-empty">لا توجد طلبات مرسلة من هذه الطاولة بعد.</p>`}
-    function renderAdmin(){els.adminList.innerHTML=state.menu.map(i=>`<div class="admin-row"><div class="admin-thumb"><img src="${i.image}" alt="${i.name}"></div><div><h3>${i.name}</h3><p>${i.category} - ${formatPrice(i.price)}</p></div><button class="danger-btn" data-delete-item="${i.id}">حذف</button></div>`).join("")}
-    function renderTablesAdmin(){els.tablesList.innerHTML=state.tables.map(t=>`<div class="admin-row"><div class="admin-thumb">${t.image?`<img src="${t.image}" alt="">`:""}</div><div class="table-edit"><input data-table-number="${t.id}" value="${t.number}"><input data-table-image="${t.id}" value="${t.image||""}" placeholder="رابط أو Base64"><label><input data-table-active="${t.id}" type="checkbox" ${t.active?"checked":""}> فعال</label></div><div class="toolbar-buttons"><button class="ghost-btn" data-save-table="${t.id}">حفظ</button><button class="danger-btn" data-delete-table="${t.id}">حذف</button></div></div>`).join("")}
-    function renderReports(){const r=state.reports;$("statOrders").textContent=Number(r.totalOrders||0).toLocaleString("ar-IQ");$("statRevenue").textContent=formatPrice(r.totalRevenue);$("statAverage").textContent=formatPrice(r.average);const max=r.topItems?.[0]?.qty||1;$("topItems").innerHTML=r.topItems?.length?r.topItems.map(i=>`<li><div><strong>${i.name}</strong><div class="bar"><i style="width:${Math.max(8,i.qty/max*100)}%"></i></div></div><strong>${i.qty}</strong></li>`).join(""):`<li><span>لا توجد طلبات بعد.</span><strong>0</strong></li>`}
-    function changeQty(id,delta){const item=state.menu.find(i=>String(i.id)===String(id));if(!item)return;const cur=state.cart[id]||{id:item.id,name:item.name,price:item.price,qty:0,note:""};cur.qty+=delta;if(cur.qty<=0)delete state.cart[id];else state.cart[id]=cur;render()}
-    async function submitOrder(){const items=Object.values(state.cart);if(!items.length)return;await api("/api/orders",{method:"POST",body:JSON.stringify({table:state.table,items})});state.cart={};await refreshOrders();render();toast(`تم إرسال طلب الطاولة ${state.table} إلى لوحة الكاشير.`)}
-    function printOrder(id){const o=state.orders.find(x=>String(x.id)===String(id));if(!o)return;const rows=o.items.map(i=>`<tr><td>${i.name}</td><td>${i.qty}</td><td>${i.note||"-"}</td><td>${formatPrice(i.price*i.qty)}</td></tr>`).join("");const w=open("","_blank","width=420,height=640");w.document.write(`<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>فاتورة ${o.id}</title><style>body{font-family:Tahoma,Arial,sans-serif;padding:18px;color:#111}table{width:100%;border-collapse:collapse;margin-top:14px}th,td{border-bottom:1px solid #ddd;padding:8px 4px;text-align:right}.total{margin-top:16px;font-size:18px;font-weight:800}</style></head><body><h1>منيو المطعم المتوسط</h1><div>رقم الطلب: ${o.id}</div><div>الطاولة: ${o.table}</div><div>الوقت: ${new Date(o.createdAt).toLocaleString("ar-IQ")}</div><table><thead><tr><th>الصنف</th><th>الكمية</th><th>ملاحظة</th><th>السعر</th></tr></thead><tbody>${rows}</tbody></table><div class="total">الإجمالي: ${formatPrice(o.total)}</div><script>window.print();<\/script></body></html>`);w.document.close()}
-    function qrUrlFor(table){const raw=$("publicBaseUrl").value.trim()||location.origin+location.pathname;const url=new URL(raw,location.href);url.searchParams.set("table",table);url.hash="";return url.toString()}
-    function renderQrCodes(force=true){if(!force&&$("qrGrid").children.length)return;const count=Math.min(80,Math.max(1,Number($("tableCount").value)||1));$("qrGrid").innerHTML=Array.from({length:count},(_,i)=>{const table=i+1,link=qrUrlFor(table),src=`https://api.qrserver.com/v1/create-qr-code/?size=260x260&margin=16&data=${encodeURIComponent(link)}`;return `<div class="qr-card"><strong>طاولة ${table}</strong><div class="qr-box"><img src="${src}" alt="QR طاولة ${table}"></div><div class="qr-link">${link}</div></div>`}).join("")}
-    function fileToBase64(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(file)})}
-    document.addEventListener("click",async e=>{try{const tab=e.target.closest("[data-view]");if(tab)return setView(tab.dataset.view);const cat=e.target.closest("[data-category]");if(cat){state.category=cat.dataset.category;return render()}const inc=e.target.closest("[data-inc]");if(inc)return changeQty(inc.dataset.inc,1);const dec=e.target.closest("[data-dec]");if(dec)return changeQty(dec.dataset.dec,-1);const st=e.target.closest("[data-status]");if(st){const [id,status]=st.dataset.status.split(":");await api(`/api/orders/${id}/status`,{method:"PATCH",body:JSON.stringify({status})});await refreshOrders();await refreshReports();render();return toast("تم تحديث حالة الطلب.")}const del=e.target.closest("[data-delete-item]");if(del){await api(`/api/menu/${del.dataset.deleteItem}`,{method:"DELETE"});state.menu=await api("/api/menu");render();return toast("تم حذف الصنف.")}const po=e.target.closest("[data-print-order]");if(po)return printOrder(po.dataset.printOrder);const save=e.target.closest("[data-save-table]");if(save){const id=save.dataset.saveTable;await api(`/api/tables/${id}`,{method:"PUT",body:JSON.stringify({number:document.querySelector(`[data-table-number="${id}"]`).value,image:document.querySelector(`[data-table-image="${id}"]`).value,active:document.querySelector(`[data-table-active="${id}"]`).checked})});state.tables=await api("/api/tables");render();return toast("تم حفظ الطاولة.")}const dt=e.target.closest("[data-delete-table]");if(dt){await api(`/api/tables/${dt.dataset.deleteTable}`,{method:"DELETE"});state.tables=await api("/api/tables");render();return toast("تم حذف الطاولة.")}}catch(err){toast(err.message)}})
-    document.addEventListener("input",e=>{const note=e.target.closest("[data-note]");if(note&&state.cart[note.dataset.note])state.cart[note.dataset.note].note=note.value})
-    els.tableSelect.addEventListener("change",async e=>{state.table=e.target.value;history.replaceState(null,"",`?table=${encodeURIComponent(state.table)}`);await refreshOrders();render()})
-    els.submitOrder.addEventListener("click",()=>submitOrder().catch(err=>toast(err.message)));$("clearCart").onclick=()=>{state.cart={};render()};$("printKitchen").onclick=()=>print();$("exportPdf").onclick=()=>{setView("reports");setTimeout(()=>print(),80)};$("generateQr").onclick=()=>renderQrCodes(true);$("printQr").onclick=()=>{renderQrCodes(true);print()}
-    $("loginBtn").onclick=async()=>{const password=prompt("كلمة المرور");if(!password)return;try{const user=await api("/api/login",{method:"POST",body:JSON.stringify({password})});state.role=user.role;await refreshOrders();await refreshReports();render();toast("تم تسجيل الدخول.")}catch(err){toast(err.message)}}
-    $("logoutBtn").onclick=async()=>{await api("/api/logout",{method:"POST",body:"{}"});state.role=null;state.orders=[];setView("customer");await refreshOrders();render();toast("تم تسجيل الخروج.")}
-    $("enableNotifications").onclick=async()=>{if(!("Notification" in window))return toast("المتصفح لا يدعم الإشعارات.");const p=await Notification.requestPermission();toast(p==="granted"?"تم تفعيل الإشعارات.":"لم يتم منح صلاحية الإشعارات.")}
-    $("seedDemo").onclick=async()=>{const items=state.menu.slice(0,2).map((i,n)=>({id:i.id,qty:n+1,note:n?"":"بدون ملح"}));await api("/api/orders",{method:"POST",body:JSON.stringify({table:state.tables[0]?.number||"1",items})});await refreshOrders();render();toast("تمت إضافة طلب تجريبي.")}
-    $("menuForm").onsubmit=async e=>{e.preventDefault();const f=e.currentTarget;await api("/api/menu",{method:"POST",body:JSON.stringify({name:$("itemName").value,category:$("itemCategory").value,price:$("itemPrice").value,image:$("itemImage").value,description:$("itemDesc").value})});f.reset();state.menu=await api("/api/menu");render();toast("تمت إضافة الصنف.")}
-    $("resetMenu").onclick=async()=>{state.menu=await api("/api/menu/reset",{method:"POST",body:"{}"});render();toast("تم استرجاع المنيو الأساسي.")}
-    $("tableForm").onsubmit=async e=>{e.preventDefault();const image=$("tableImageFile").files[0]?await fileToBase64($("tableImageFile").files[0]):$("tableImageUrl").value;await api("/api/tables",{method:"POST",body:JSON.stringify({number:$("tableNumber").value,image,active:$("tableActive").checked})});e.currentTarget.reset();$("tableActive").checked=true;state.tables=await api("/api/tables");render();toast("تمت إضافة الطاولة.")}
-    $("toggleDark").onclick=async()=>{state.dark=!state.dark;localStorage.setItem("med-dark",state.dark);applyTheme();await api("/api/settings/dark",{method:"POST",body:JSON.stringify({dark:state.dark})})}
-    $("syncData").onclick=()=>{location.href=`${API_BASE}/api/export`};$("publicBaseUrl").value=location.protocol==="file:"?"http://localhost:5000/":location.origin+location.pathname;
-    async function poll(){setInterval(async()=>{try{const before=state.orders[0]?.id||0;await refreshOrders();if(canStaff()&&state.orders[0]?.id&&state.orders[0].id!==before&&Notification?.permission==="granted")new Notification("طلب جديد",{body:`وصل طلب من الطاولة ${state.orders[0].table}`});render()}catch{}},5000)}
-    bootstrap().catch(err=>toast(err.message));
-  </script>
+<div class="app-shell">
+  <header class="topbar">
+    <div class="brand"><div class="brand-mark">م</div><div class="brand-title"><strong>منيو المطعم المتوسط</strong><span id="roleLabel">وضع الزبون</span></div></div>
+    <nav class="nav-tabs" id="navTabs">
+      <button class="tab active" data-view="customer">الزبون</button>
+      <button class="tab auth" data-view="cashier">الكاشير</button>
+      <button class="tab auth" data-view="kitchen">المطبخ</button>
+      <button class="tab admin-only" data-view="admin">إدارة المنيو</button>
+      <button class="tab admin-only" data-view="tables">الطاولات</button>
+      <button class="tab auth" data-view="reports">التقارير</button>
+    </nav>
+    <div class="top-actions"><button class="ghost-btn" id="loginBtn">دخول المدير</button><button class="ghost-btn hidden" id="logoutBtn">تسجيل خروج</button></div>
+  </header>
+  <main>
+    <section id="customer" class="page active">
+      <div class="hero"><div class="hero-content"><h1>اطلب من طاولتك مباشرة</h1><p>اختر الأصناف، عدل الكميات، أضف ملاحظاتك.</p></div></div>
+      <div class="main-grid">
+        <section><div class="menu-tools"><h2 class="section-title">قائمة الطعام</h2><div class="field"><select id="tableSelect"></select></div><div class="table-badge" id="tableBadge"></div></div><div class="category-tabs" id="categoryTabs"></div><div class="menu-list" id="menuList"></div></section>
+        <aside class="cart"><h2>طلبك الحالي</h2><div id="cartLines" class="cart-lines"></div><p id="cartEmpty" class="cart-empty">لم تختر أي صنف بعد.</p><div class="total-row"><span>الإجمالي</span><span id="cartTotal">0 د.ع</span></div><button class="primary-btn" id="submitOrder" disabled>إرسال الطلب</button><button class="ghost-btn" id="clearCart">تفريغ السلة</button><div class="table-orders"><h3 class="section-title">طلبات هذه الطاولة</h3><div id="customerOrders"></div></div></aside>
+      </div>
+    </section>
+    <section id="cashier" class="page"><div class="workspace"><div class="orders-toolbar"><div><h2 class="section-title">لوحة الكاشير</h2><div class="order-meta">إدارة جميع الطلبات</div></div><div class="toolbar-buttons"><button class="ghost-btn" id="seedDemo">إضافة طلب تجريبي</button><button class="ghost-btn" id="enableNotifications">تفعيل الإشعارات</button></div></div><div class="orders-grid" id="cashierOrders"></div></div></section>
+    <section id="kitchen" class="page"><div class="workspace"><div class="orders-toolbar"><div><h2 class="section-title">شاشة المطبخ</h2><div class="order-meta">الطلبات قيد التحضير</div></div><button class="ghost-btn" id="printKitchen">طباعة الشاشة</button></div><div class="kitchen-board" id="kitchenOrders"></div></div></section>
+    <section id="admin" class="page"><div class="workspace"><div class="admin-toolbar"><div><h2 class="section-title">إدارة المنيو المركزي</h2></div><button class="ghost-btn" id="resetMenu">استرجاع المنيو الأساسي</button></div><div class="admin-layout"><form class="form-panel" id="menuForm"><div class="field"><label>اسم الصنف</label><input id="itemName" required></div><div class="field"><label>القسم</label><select id="itemCategory"><option>المقبلات</option><option>الأطباق الرئيسية</option><option>المشروبات</option><option>الحلويات</option></select></div><div class="field"><label>السعر (دينار)</label><input id="itemPrice" type="number" step="500" required></div><div class="field"><label>رابط الصورة</label><input id="itemImage" value="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&h=200&fit=crop"></div><div class="field"><label>وصف مختصر</label><textarea id="itemDesc" rows="2" required></textarea></div><button class="primary-btn" type="submit">إضافة الصنف</button></form><div class="admin-list" id="adminList"></div></div></div></section>
+    <section id="tables" class="page"><div class="workspace"><div class="admin-toolbar"><div><h2 class="section-title">إدارة الطاولات والصور</h2></div></div><div class="tables-layout"><form class="form-panel" id="tableForm"><div class="field"><label>رقم الطاولة</label><input id="tableNumber" required></div><div class="field"><label>رابط صورة</label><input id="tableImageUrl" placeholder="رابط صورة الطاولة"></div><div class="field"><label>رفع صورة محلية</label><input id="tableImageFile" type="file" accept="image/*"></div><label><input id="tableActive" type="checkbox" checked> الطاولة فعالة</label><button class="primary-btn" type="submit">إضافة طاولة</button></form><div class="admin-list" id="tablesList"></div></div></div></section>
+    <section id="reports" class="page"><div class="workspace"><div class="orders-toolbar"><div><h2 class="section-title">التقارير والإحصائيات</h2></div><div class="toolbar-buttons"><button class="ghost-btn" id="toggleDark">الوضع المظلم</button><button class="ghost-btn" id="syncData">نسخ احتياطي</button><button class="primary-btn" id="exportPdf">تصدير PDF</button></div></div><div class="reports-grid"><div class="metric-card"><span>إجمالي الطلبات</span><strong id="statOrders">0</strong></div><div class="metric-card"><span>إجمالي الإيرادات</span><strong id="statRevenue">0 د.ع</strong></div><div class="metric-card"><span>متوسط قيمة الطلب</span><strong id="statAverage">0 د.ع</strong></div></div><div class="report-layout"><section class="report-panel"><h3 class="section-title">الأصناف الأكثر طلباً</h3><ul class="top-items" id="topItems"></ul></section><aside class="report-panel"><h3 class="section-title">توليد QR للطاولات</h3><div class="field"><label>رابط الموقع الأساسي</label><input id="publicBaseUrl" dir="ltr" placeholder="https://your-app.onrender.com"></div><div class="field"><label>عدد الطاولات</label><input id="tableCount" type="number" min="1" max="30" value="8"></div><button class="ghost-btn" id="generateQr">توليد الأكواد</button><button class="ghost-btn" id="printQr">طباعة الأكواد</button><div class="qr-grid" id="qrGrid"></div></aside></div></div></section>
+  </main>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+  // تكوين API - يتغير تلقائياً حسب البيئة
+  const API_BASE = window.location.origin;
+  
+  let state = {
+    view: "customer",
+    role: null,
+    username: null,
+    category: "المقبلات",
+    table: "1",
+    cart: {},
+    menu: [],
+    tables: [],
+    orders: [],
+    dark: localStorage.getItem("med_dark") === "true"
+  };
+  
+  const statusLabels = { new: "جديد", confirmed: "تم الاستلام", preparing: "قيد التحضير", ready: "جاهز", delivered: "تم التوصيل" };
+  
+  // دوال مساعدة
+  const $ = id => document.getElementById(id);
+  function formatPrice(v) { return `${Number(v || 0).toLocaleString("ar-IQ")} د.ع`; }
+  
+  function toast(msg) {
+    let t = $("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(toast.timer);
+    toast.timer = setTimeout(() => t.classList.remove("show"), 2500);
+  }
+  
+  // دوال API
+  async function api(path, options = {}) {
+    try {
+      const res = await fetch(`${API_BASE}${path}`, {
+        credentials: "include",
+        headers: { "Content-Type": "application/json", ...(options.headers || {}) },
+        ...options
+      });
+      if (!res.ok) {
+        let errorMsg = "حدث خطأ";
+        try { const data = await res.json(); errorMsg = data.error || errorMsg; } catch(e) {}
+        throw new Error(errorMsg);
+      }
+      return res.headers.get("content-type")?.includes("json") ? res.json() : res.text();
+    } catch (err) {
+      toast(`❌ ${err.message}`);
+      throw err;
+    }
+  }
+  
+  async function bootstrap() {
+    try {
+      const data = await api("/api/bootstrap");
+      state.role = data.user?.role || null;
+      state.username = data.user?.username || null;
+      state.menu = data.menu || [];
+      state.tables = data.tables || [];
+      if (!state.tables.some(t => t.number === state.table)) {
+        let active = state.tables.find(t => t.active);
+        if (active) state.table = active.number;
+      }
+      await refreshOrders();
+      await refreshReports();
+      render();
+      startPolling();
+    } catch (err) {
+      toast("⚠️ لا يمكن الاتصال بالخادم. تأكد من تشغيل الخادم.");
+      console.error(err);
+    }
+  }
+  
+  async function refreshOrders() {
+    if (canStaff()) {
+      state.orders = await api("/api/orders");
+    } else {
+      state.orders = await api(`/api/orders/recent?table=${encodeURIComponent(state.table)}`);
+    }
+  }
+  
+  async function refreshReports() {
+    if (canStaff()) {
+      const reports = await api("/api/reports");
+      state.reports = reports;
+    }
+  }
+  
+  function canStaff() { return ["admin", "cashier", "kitchen"].includes(state.role); }
+  function canAdmin() { return state.role === "admin"; }
+  
+  function applyAuth() {
+    document.querySelectorAll(".auth").forEach(el => el.classList.toggle("hidden", !canStaff()));
+    document.querySelectorAll(".admin-only").forEach(el => el.classList.toggle("hidden", !canAdmin()));
+    $("loginBtn").classList.toggle("hidden", canStaff());
+    $("logoutBtn").classList.toggle("hidden", !canStaff());
+    $("roleLabel").innerText = state.role ? `دخول: ${state.role}` : "وضع الزبون";
+    if (!canStaff() && state.view !== "customer") setView("customer");
+    if (!canAdmin() && ["admin", "tables"].includes(state.view)) setView("customer");
+  }
+  
+  function applyTheme() {
+    document.body.classList.toggle("dark", state.dark);
+    if ($("toggleDark")) $("toggleDark").innerText = state.dark ? "الوضع الفاتح" : "الوضع المظلم";
+  }
+  
+  function setView(view) {
+    state.view = view;
+    document.querySelectorAll(".page").forEach(p => p.classList.toggle("active", p.id === view));
+    document.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t.dataset.view === view));
+    render();
+  }
+  
+  // العمليات الأساسية
+  async function submitOrder() {
+    let items = Object.values(state.cart);
+    if (items.length === 0) return toast("❌ أضف أصنافاً أولاً");
+    try {
+      await api("/api/orders", {
+        method: "POST",
+        body: JSON.stringify({ table: state.table, items: items.map(i => ({ id: i.id, qty: i.qty, note: i.note })) })
+      });
+      state.cart = {};
+      await refreshOrders();
+      render();
+      toast(`✅ تم إرسال طلب الطاولة ${state.table}`);
+    } catch (err) { toast(err.message); }
+  }
+  
+  async function updateOrderStatus(orderId, newStatus) {
+    try {
+      await api(`/api/orders/${orderId}/status`, { method: "PATCH", body: JSON.stringify({ status: newStatus }) });
+      await refreshOrders();
+      await refreshReports();
+      render();
+      toast(`✅ تم تحديث الحالة إلى ${statusLabels[newStatus]}`);
+    } catch (err) { toast(err.message); }
+  }
+  
+  async function deleteMenuItem(id) {
+    if (!confirm("حذف هذا الصنف؟")) return;
+    try {
+      await api(`/api/menu/${id}`, { method: "DELETE" });
+      state.menu = await api("/api/menu");
+      render();
+      toast("🗑️ تم حذف الصنف");
+    } catch (err) { toast(err.message); }
+  }
+  
+  async function addMenuItem(data) {
+    try {
+      await api("/api/menu", { method: "POST", body: JSON.stringify(data) });
+      state.menu = await api("/api/menu");
+      render();
+      toast("➕ تمت إضافة الصنف");
+    } catch (err) { toast(err.message); }
+  }
+  
+  async function resetMenu() {
+    if (!confirm("استرجاع المنيو الأساسي؟")) return;
+    try {
+      state.menu = await api("/api/menu/reset", { method: "POST", body: "{}" });
+      render();
+      toast("🔄 تم استرجاع المنيو الأساسي");
+    } catch (err) { toast(err.message); }
+  }
+  
+  async function addTable(table) {
+    try {
+      await api("/api/tables", { method: "POST", body: JSON.stringify(table) });
+      state.tables = await api("/api/tables");
+      render();
+      toast("➕ تمت إضافة الطاولة");
+    } catch (err) { toast(err.message); }
+  }
+  
+  async function updateTable(id, data) {
+    try {
+      await api(`/api/tables/${id}`, { method: "PUT", body: JSON.stringify(data) });
+      state.tables = await api("/api/tables");
+      render();
+      toast("✏️ تم تحديث الطاولة");
+    } catch (err) { toast(err.message); }
+  }
+  
+  async function deleteTable(id) {
+    if (!confirm("حذف الطاولة؟")) return;
+    try {
+      await api(`/api/tables/${id}`, { method: "DELETE" });
+      state.tables = await api("/api/tables");
+      render();
+      toast("🗑️ تم حذف الطاولة");
+    } catch (err) { toast(err.message); }
+  }
+  
+  function changeQty(id, delta) {
+    let item = state.menu.find(i => i.id == id);
+    if (!item) return;
+    if (!state.cart[id]) state.cart[id] = { id: item.id, name: item.name, price: item.price, qty: 0, note: "" };
+    state.cart[id].qty += delta;
+    if (state.cart[id].qty <= 0) delete state.cart[id];
+    render();
+  }
+  
+  // ========== دوال العرض ==========
+  function render() {
+    applyAuth();
+    applyTheme();
+    renderTableSelect();
+    renderCategories();
+    renderMenu();
+    renderCart();
+    renderOrders();
+    renderAdminList();
+    renderTablesList();
+    renderReports();
+  }
+  
+  function renderTableSelect() {
+    let activeTables = state.tables.filter(t => t.active);
+    let select = $("tableSelect");
+    if (select) {
+      select.innerHTML = activeTables.map(t => `<option value="${t.number}" ${t.number === state.table ? "selected" : ""}>طاولة ${t.number}</option>`).join("");
+      let table = activeTables.find(t => t.number === state.table) || {};
+      $("tableBadge").innerHTML = `${table.image ? `<img src="${table.image}" alt="طاولة">` : "<span>🍽️</span>"}<span>الطاولة ${state.table}</span>`;
+    }
+  }
+  
+  function renderCategories() {
+    let categories = ["المقبلات", "الأطباق الرئيسية", "المشروبات", "الحلويات"];
+    let container = $("categoryTabs");
+    if (container) {
+      container.innerHTML = categories.map(c => `<button class="chip ${state.category === c ? "active" : ""}" data-cat="${c}">${c}</button>`).join("");
+    }
+  }
+  
+  function renderMenu() {
+    let container = $("menuList");
+    if (!container) return;
+    let items = state.menu.filter(i => i.category === state.category);
+    container.innerHTML = items.length ? items.map(i => {
+      let q = state.cart[i.id]?.qty || 0;
+      return `<article class="item-card"><div class="item-media"><img src="${i.image}" alt="${i.name}" loading="lazy"></div><div class="item-body"><div class="item-title-row"><h3>${i.name}</h3><span class="price">${formatPrice(i.price)}</span></div><p class="desc">${i.description || "..."}</p><div class="item-actions"><div class="qty"><button data-dec="${i.id}">-</button><span>${q}</span><button data-inc="${i.id}">+</button></div><button class="add-note" data-inc="${i.id}">إضافة</button></div></div></article>`;
+    }).join("") : `<div class="empty-state">📭 لا توجد أصناف في هذا القسم</div>`;
+  }
+  
+  function renderCart() {
+    let lines = Object.values(state.cart);
+    if ($("cartEmpty")) $("cartEmpty").style.display = lines.length ? "none" : "block";
+    if ($("submitOrder")) $("submitOrder").disabled = !lines.length;
+    if ($("cartLines")) {
+      $("cartLines").innerHTML = lines.map(l => `<div class="cart-line"><div class="line-head"><span>${l.name} × ${l.qty}</span><span>${formatPrice(l.price * l.qty)}</span></div><textarea class="note-input" data-note-id="${l.id}" rows="2" placeholder="ملاحظة (مثل: بدون ملح)">${l.note || ""}</textarea></div>`).join("");
+    }
+    if ($("cartTotal")) $("cartTotal").innerText = formatPrice(lines.reduce((s, l) => s + l.price * l.qty, 0));
+  }
+  
+  function orderCard(o, kitchen = false) {
+    let actions = kitchen ? 
+      `<button data-update="${o.id}:ready">✅ جاهز</button>` : 
+      `<button data-update="${o.id}:confirmed">📋 استلام</button><button data-update="${o.id}:preparing">🍳 تحضير</button><button data-update="${o.id}:ready">✅ جاهز</button><button data-update="${o.id}:delivered">🚚 توصيل</button>`;
+    return `<div class="order-card ${kitchen ? "kitchen-card" : ""}"><div class="order-head"><div><strong>طاولة ${o.table}</strong><div class="order-meta">${new Date(o.createdAt).toLocaleString("ar-IQ")}</div></div><span class="status ${o.status}">${statusLabels[o.status]}</span></div><ul class="order-items">${o.items.map(i => `<li><strong>${i.name} × ${i.qty}</strong><small>${i.note ? `📝 ${i.note}` : ""}</small></li>`).join("")}</ul><div class="total-row"><span>المجموع</span><span>${formatPrice(o.total)}</span></div><div class="status-actions">${actions}</div>${kitchen ? "" : `<button class="ghost-btn" data-print="${o.id}">🖨️ طباعة</button>`}</div>`;
+  }
+  
+  function renderOrders() {
+    if ($("cashierOrders")) {
+      $("cashierOrders").innerHTML = state.orders.length ? state.orders.map(o => orderCard(o)).join("") : `<div class="empty-state">📋 لا توجد طلبات بعد</div>`;
+    }
+    let kitchenOrders = state.orders.filter(o => ["confirmed", "preparing"].includes(o.status));
+    if ($("kitchenOrders")) {
+      $("kitchenOrders").innerHTML = kitchenOrders.length ? kitchenOrders.map(o => orderCard(o, true)).join("") : `<div class="empty-state">🍳 لا توجد طلبات للمطبخ</div>`;
+    }
+    let tableOrders = state.orders.filter(o => o.table === state.table).slice(0, 5);
+    if ($("customerOrders")) {
+      $("customerOrders").innerHTML = tableOrders.length ? tableOrders.map(o => `<div class="table-order-line"><span>${new Date(o.createdAt).toLocaleTimeString()}</span><span class="status ${o.status}">${statusLabels[o.status]}</span></div>`).join("") : `<p class="cart-empty">لا توجد طلبات مرسلة من هذه الطاولة بعد</p>`;
+    }
+  }
+  
+  function renderAdminList() {
+    if ($("adminList")) {
+      $("adminList").innerHTML = state.menu.map(i => `<div class="admin-row"><div class="admin-thumb"><img src="${i.image}" alt="${i.name}"></div><div><h3>${i.name}</h3><p>${i.category} - ${formatPrice(i.price)}</p></div><button class="danger-btn" data-del-item="${i.id}">🗑️ حذف</button></div>`).join("");
+    }
+  }
+  
+  function renderTablesList() {
+    if ($("tablesList")) {
+      $("tablesList").innerHTML = state.tables.map(t => `<div class="admin-row"><div class="admin-thumb">${t.image ? `<img src="${t.image}" alt="طاولة">` : "🍽️"}</div><div class="table-edit"><input data-tnum="${t.id}" value="${t.number}" placeholder="رقم"><input data-timg="${t.id}" value="${t.image || ""}" placeholder="رابط صورة"><label><input data-tact="${t.id}" type="checkbox" ${t.active ? "checked" : ""}> فعال</label></div><div class="toolbar-buttons"><button class="ghost-btn" data-savet="${t.id}">💾 حفظ</button><button class="danger-btn" data-delt="${t.id}">🗑️ حذف</button></div></div>`).join("");
+    }
+  }
+  
+  function renderReports() {
+    if (!state.reports) return;
+    if ($("statOrders")) $("statOrders").innerText = (state.reports.totalOrders || 0).toLocaleString("ar-IQ");
+    if ($("statRevenue")) $("statRevenue").innerText = formatPrice(state.reports.totalRevenue || 0);
+    if ($("statAverage")) $("statAverage").innerText = formatPrice(state.reports.average || 0);
+    if ($("topItems") && state.reports.topItems) {
+      let maxQty = state.reports.topItems[0]?.qty || 1;
+      $("topItems").innerHTML = state.reports.topItems.length ? state.reports.topItems.map(i => `<li><div><strong>${i.name}</strong><div class="bar"><i style="width: ${Math.max(5, (i.qty / maxQty) * 100)}%"></i></div></div><strong>${i.qty}</strong></li>`).join("") : `<li><span>📊 لا توجد طلبات بعد</span><strong>0</strong></li>`;
+    }
+  }
+  
+  function renderQr() {
+    let count = Math.min(30, Math.max(1, parseInt($("tableCount")?.value) || 8));
+    let base = $("publicBaseUrl")?.value.trim() || window.location.origin;
+    let container = $("qrGrid");
+    if (container) {
+      container.innerHTML = Array.from({ length: count }, (_, i) => {
+        let tableNum = i + 1;
+        let link = `${base}${base.includes("?") ? "&" : "?"}table=${tableNum}`;
+        let src = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&margin=10&data=${encodeURIComponent(link)}`;
+        return `<div class="qr-card"><strong>طاولة ${tableNum}</strong><div class="qr-box"><img src="${src}" alt="QR"></div><div class="qr-link">${link}</div></div>`;
+      }).join("");
+    }
+  }
+  
+  function printOrder(order) {
+    let w = window.open("", "_blank");
+    w.document.write(`
+      <!DOCTYPE html>
+      <html dir="rtl">
+      <head><meta charset="utf-8"><title>فاتورة طاولة ${order.table}</title>
+      <style>body{font-family:Tahoma;padding:20px}table{width:100%;border-collapse:collapse}th,td{border-bottom:1px solid #ddd;padding:8px;text-align:right}.total{font-size:18px;font-weight:bold;margin-top:16px}</style>
+      </head><body>
+      <h1>منيو المطعم المتوسط</h1>
+      <div><strong>طاولة:</strong> ${order.table}</div>
+      <div><strong>الوقت:</strong> ${new Date(order.createdAt).toLocaleString("ar-IQ")}</div>
+      <table border="0"><thead><tr><th>الصنف</th><th>الكمية</th><th>ملاحظة</th><th>السعر</th></tr></thead><tbody>
+      ${order.items.map(i => `<tr><td>${i.name}</td><td>${i.qty}</td><td>${i.note || "-"}</td><td>${formatPrice(i.price * i.qty)}</td></tr>`).join("")}
+      </tbody></table>
+      <div class="total">الإجمالي: ${formatPrice(order.total)}</div>
+      <script>window.print();<\/script>
+      </body></html>
+    `);
+    w.document.close();
+  }
+  
+  // ========== أحداث المستخدم ==========
+  function setupEventListeners() {
+    $("tableSelect")?.addEventListener("change", async (e) => {
+      state.table = e.target.value;
+      await refreshOrders();
+      render();
+    });
+    
+    $("submitOrder")?.addEventListener("click", submitOrder);
+    $("clearCart")?.addEventListener("click", () => { state.cart = {}; render(); toast("🗑️ تم تفريغ السلة"); });
+    $("resetMenu")?.addEventListener("click", resetMenu);
+    $("toggleDark")?.addEventListener("click", () => { state.dark = !state.dark; localStorage.setItem("med_dark", state.dark); applyTheme(); });
+    $("syncData")?.addEventListener("click", () => window.open(`${API_BASE}/api/export`, "_blank"));
+    $("exportPdf")?.addEventListener("click", () => { setView("reports"); setTimeout(() => window.print(), 100); });
+    $("printKitchen")?.addEventListener("click", () => window.print());
+    $("generateQr")?.addEventListener("click", renderQr);
+    $("printQr")?.addEventListener("click", () => { renderQr(); setTimeout(() => window.print(), 100); });
+    
+    $("seedDemo")?.addEventListener("click", async () => {
+      let sampleItems = state.menu.slice(0, 2).map((i, idx) => ({ id: i.id, qty: 1, note: idx === 0 ? "بدون ملح" : "" }));
+      try {
+        await api("/api/orders", { method: "POST", body: JSON.stringify({ table: state.table, items: sampleItems }) });
+        await refreshOrders();
+        render();
+        toast("✅ تمت إضافة طلب تجريبي");
+      } catch (err) { toast(err.message); }
+    });
+    
+    $("enableNotifications")?.addEventListener("click", async () => {
+      if (!("Notification" in window)) return toast("المتصفح لا يدعم الإشعارات");
+      let p = await Notification.requestPermission();
+      toast(p === "granted" ? "✅ تم تفعيل الإشعارات" : "❌ لم يتم منح الصلاحية");
+    });
+    
+    $("menuForm")?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      await addMenuItem({
+        name: $("itemName").value,
+        category: $("itemCategory").value,
+        price: parseInt($("itemPrice").value),
+        image: $("itemImage").value,
+        description: $("itemDesc").value
+      });
+      e.target.reset();
+    });
+    
+    $("tableForm")?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      let file = $("tableImageFile")?.files[0];
+      if (file) {
+        let reader = new FileReader();
+        reader.onload = async (ev) => {
+          await addTable({ number: $("tableNumber").value, image: ev.target.result, active: $("tableActive").checked });
+        };
+        reader.readAsDataURL(file);
+      } else {
+        await addTable({ number: $("tableNumber").value, image: $("tableImageUrl").value, active: $("tableActive").checked });
+      }
+      e.target.reset();
+      $("tableActive").checked = true;
+    });
+  }
+  
+  // ========== أحداث النقر الديناميكية ==========
+  document.addEventListener("click", (e) => {
+    let tab = e.target.closest("[data-view]");
+    if (tab) { setView(tab.dataset.view); return; }
+    
+    let cat = e.target.closest("[data-cat]");
+    if (cat) { state.category = cat.innerText; render(); return; }
+    
+    let inc = e.target.closest("[data-inc]");
+    if (inc) { changeQty(inc.dataset.inc, 1); return; }
+    let dec = e.target.closest("[data-dec]");
+    if (dec) { changeQty(dec.dataset.dec, -1); return; }
+    
+    let upd = e.target.closest("[data-update]");
+    if (upd) { let [id, st] = upd.dataset.update.split(":"); updateOrderStatus(id, st); return; }
+    
+    let del = e.target.closest("[data-del-item]");
+    if (del) { deleteMenuItem(del.dataset.delItem); return; }
+    
+    let printBtn = e.target.closest("[data-print]");
+    if (printBtn) { let order = state.orders.find(o => o.id == printBtn.dataset.print); if (order) printOrder(order); return; }
+    
+    let savet = e.target.closest("[data-savet]");
+    if (savet) {
+      let id = savet.dataset.savet;
+      updateTable(id, {
+        number: document.querySelector(`[data-tnum="${id}"]`)?.value,
+        image: document.querySelector(`[data-timg="${id}"]`)?.value,
+        active: document.querySelector(`[data-tact="${id}"]`)?.checked
+      });
+      return;
+    }
+    
+    let delt = e.target.closest("[data-delt]");
+    if (delt) { deleteTable(delt.dataset.delt); return; }
+  });
+  
+  document.addEventListener("input", (e) => {
+    let noteInput = e.target.closest("[data-note-id]");
+    if (noteInput && state.cart[noteInput.dataset.noteId]) {
+      state.cart[noteInput.dataset.noteId].note = noteInput.value;
+    }
+  });
+  
+  // ========== تسجيل الدخول ==========
+  $("loginBtn").onclick = async () => {
+    let pwd = prompt("🔐 كلمة المرور:\n\nadmin123 → مدير\ncashier123 → كاشير\nkitchen123 → مطبخ");
+    if (!pwd) return;
+    try {
+      const user = await api("/api/login", { method: "POST", body: JSON.stringify({ password: pwd }) });
+      state.role = user.role;
+      state.username = user.username;
+      await refreshOrders();
+      await refreshReports();
+      render();
+      toast(`✅ مرحباً ${user.role === "admin" ? "مدير" : user.role === "cashier" ? "كاشير" : "مطبخ"}`);
+      if (Notification.permission !== "granted" && Notification.permission !== "denied") {
+        Notification.requestPermission();
+      }
+    } catch (err) { toast(err.message); }
+  };
+  
+  $("logoutBtn").onclick = async () => {
+    try {
+      await api("/api/logout", { method: "POST", body: "{}" });
+      state.role = null;
+      state.username = null;
+      state.cart = {};
+      setView("customer");
+      await refreshOrders();
+      render();
+      toast("👋 تم تسجيل الخروج");
+    } catch (err) { toast(err.message); }
+  };
+  
+  // ========== التحديث التلقائي ==========
+  let pollingInterval;
+  function startPolling() {
+    if (pollingInterval) clearInterval(pollingInterval);
+    pollingInterval = setInterval(async () => {
+      try {
+        let oldOrders = JSON.stringify(state.orders);
+        await refreshOrders();
+        if (canStaff() && oldOrders !== JSON.stringify(state.orders) && Notification.permission === "granted") {
+          let newOrder = state.orders[0];
+          if (newOrder) new Notification("🆕 طلب جديد!", { body: `طاولة ${newOrder.table} - ${newOrder.items.length} أطباق` });
+        }
+        render();
+      } catch (err) { console.error(err); }
+    }, 5000);
+  }
+  
+  // ========== قراءة رقم الطاولة من الرابط ==========
+  function initTableFromUrl() {
+    let urlParams = new URLSearchParams(window.location.search);
+    let tableParam = urlParams.get("table");
+    if (tableParam && state.tables.some(t => t.number === tableParam && t.active)) {
+      state.table = tableParam;
+    }
+  }
+  
+  // ========== بدء التشغيل ==========
+  initTableFromUrl();
+  setupEventListeners();
+  bootstrap();
+  
+  if ($("publicBaseUrl")) {
+    $("publicBaseUrl").value = window.location.origin;
+  }
+</script>
 </body>
 </html>
