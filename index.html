@@ -1,0 +1,1618 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>منيو المطعم المتوسط</title>
+  <style>
+    :root{
+      --bg:#f6f3eb;
+      --surface:#fffaf2;
+      --surface-2:#ffffff;
+      --text:#1f2937;
+      --muted:#667085;
+      --line:#e5dccd;
+      --brand:#0f766e;
+      --brand-strong:#115e59;
+      --accent:#c2410c;
+      --soft:#eef8f6;
+      --shadow:0 18px 60px rgba(17,24,39,.10);
+      --radius:20px;
+    }
+    body.dark{
+      --bg:#0b1220;
+      --surface:#111827;
+      --surface-2:#172033;
+      --text:#eef2ff;
+      --muted:#aab4c3;
+      --line:#28324a;
+      --brand:#2dd4bf;
+      --brand-strong:#14b8a6;
+      --accent:#fb923c;
+      --soft:#14313d;
+      --shadow:0 18px 60px rgba(0,0,0,.32);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:Tahoma,Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top right, rgba(15,118,110,.10), transparent 28%),
+        radial-gradient(circle at bottom left, rgba(194,65,12,.08), transparent 26%),
+        var(--bg);
+    }
+    button,input,select,textarea{font:inherit}
+    button{border:0;cursor:pointer}
+    img{display:block;max-width:100%;height:auto}
+    a{color:inherit}
+    .hidden{display:none!important}
+    .app-shell{min-height:100vh;display:grid;grid-template-rows:auto auto 1fr}
+    .topbar{
+      position:sticky;top:0;z-index:30;
+      display:flex;align-items:center;justify-content:space-between;gap:16px;
+      padding:14px clamp(14px,3vw,34px);
+      backdrop-filter:blur(16px);
+      background:color-mix(in srgb, var(--bg) 88%, transparent);
+      border-bottom:1px solid var(--line);
+    }
+    .brand{display:flex;align-items:center;gap:12px;min-width:0}
+    .brand-mark{
+      width:44px;height:44px;display:grid;place-items:center;
+      border-radius:14px;color:#fff;font-weight:900;letter-spacing:.04em;
+      background:linear-gradient(135deg,var(--brand),var(--brand-strong));
+      box-shadow:0 12px 28px rgba(15,118,110,.24);
+      flex:none;
+    }
+    .brand-title{display:grid;gap:3px;min-width:0}
+    .brand-title strong{font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .brand-title span{color:var(--muted);font-size:13px;line-height:1.4}
+    .top-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+    .chip,.tab,.ghost-btn,.primary-btn,.danger-btn,.add-note{
+      min-height:42px;padding:0 14px;border-radius:14px;
+      font-weight:700;transition:transform .18s ease,background .18s ease,border-color .18s ease,opacity .18s ease;
+    }
+    .chip:hover,.tab:hover,.ghost-btn:hover,.primary-btn:hover,.danger-btn:hover,.add-note:hover{transform:translateY(-1px)}
+    .chip,.tab,.ghost-btn{
+      color:var(--text);
+      background:var(--surface-2);
+      border:1px solid var(--line);
+      box-shadow:0 8px 18px rgba(15,23,42,.04);
+    }
+    .chip.active,.tab.active{color:#fff;border-color:transparent;background:linear-gradient(135deg,var(--brand),var(--brand-strong))}
+    .primary-btn,.add-note{color:#fff;background:linear-gradient(135deg,var(--brand),var(--brand-strong))}
+    .danger-btn{color:#fff;background:linear-gradient(135deg,#dc2626,#991b1b)}
+    .ghost-btn{background:var(--surface-2)}
+    .toolbar-select,.field input,.field textarea,.field select,.note-input{
+      min-height:44px;width:100%;
+      padding:10px 12px;border-radius:14px;
+      border:1px solid var(--line);background:var(--surface-2);color:var(--text);
+      outline:none;
+    }
+    .toolbar-select:focus,.field input:focus,.field textarea:focus,.field select:focus,.note-input:focus{border-color:color-mix(in srgb, var(--brand) 70%, white);box-shadow:0 0 0 4px color-mix(in srgb, var(--brand) 16%, transparent)}
+    .nav-shell{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      padding:10px clamp(14px,3vw,34px) 16px;
+    }
+    .nav-tabs{
+      display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none;
+    }
+    .nav-tabs::-webkit-scrollbar{display:none}
+    .role-pill{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:10px 14px;border-radius:999px;
+      background:var(--soft);color:var(--brand-strong);border:1px solid color-mix(in srgb, var(--brand) 22%, var(--line));
+      font-weight:800;white-space:nowrap;
+    }
+    .page{display:none}
+    .page.active{display:block}
+    .hero{
+      position:relative;overflow:hidden;
+      min-height:clamp(260px,34vw,440px);
+      display:grid;align-items:end;
+      padding:clamp(28px,6vw,76px) clamp(16px,4vw,56px);
+      color:#fff;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,.14), transparent 26%),
+        radial-gradient(circle at 82% 12%, rgba(255,255,255,.10), transparent 18%),
+        linear-gradient(135deg, rgba(8,15,24,.94), rgba(8,15,24,.50)),
+        linear-gradient(135deg, #16202d, #0f766e 60%, #1f2937);
+    }
+    .hero::after{
+      content:"";position:absolute;inset:auto -8% -28% auto;width:360px;height:360px;border-radius:50%;
+      background:radial-gradient(circle, rgba(255,255,255,.10), transparent 68%);
+      pointer-events:none;
+    }
+    .hero-content{position:relative;max-width:760px;z-index:1}
+    .hero-badges{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+    .hero-badge{
+      padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(8px);font-size:13px;font-weight:700;
+    }
+    .hero h1{margin:0 0 12px;font-size:clamp(34px,5vw,74px);line-height:1.02;letter-spacing:-.02em}
+    .hero p{margin:0;max-width:680px;color:rgba(255,255,255,.88);font-size:clamp(15px,1.7vw,20px);line-height:1.9}
+    .section-wrap{width:min(1360px,calc(100% - 24px));margin:22px auto 42px}
+    .main-grid{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:20px;align-items:start}
+    .stack{display:grid;gap:18px}
+    .panel{
+      border:1px solid var(--line);border-radius:var(--radius);background:var(--surface-2);box-shadow:var(--shadow);
+    }
+    .menu-tools,.orders-toolbar,.admin-toolbar,.tables-toolbar,.reports-toolbar{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px;
+    }
+    .section-title{margin:0;font-size:20px;line-height:1.25}
+    .section-note{margin:6px 0 0;color:var(--muted);line-height:1.7}
+    .menu-filters,.status-actions,.toolbar-buttons,.lang-switch{display:flex;gap:8px;flex-wrap:wrap}
+    .menu-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .item-card{
+      display:grid;grid-template-columns:132px minmax(0,1fr);
+      min-height:160px;overflow:hidden;border:1px solid var(--line);
+      border-radius:18px;background:var(--surface-2);box-shadow:0 10px 24px rgba(15,23,42,.05);
+    }
+    .item-media{min-height:160px;background:linear-gradient(135deg, #d8e4df, #edf4f0)}
+    .item-media img{width:100%;height:100%;object-fit:cover}
+    .item-body{display:grid;grid-template-rows:auto 1fr auto;gap:10px;padding:14px;min-width:0}
+    .item-title-row,.line-head,.total-row,.order-head,.table-order-line{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+    .item-title-row h3,.admin-row h3{margin:0;font-size:17px;line-height:1.35}
+    .price{color:var(--accent);font-weight:900;white-space:nowrap}
+    .desc{margin:0;font-size:13px;color:var(--muted);line-height:1.75}
+    .item-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+    .qty{display:grid;grid-template-columns:34px 34px 34px;overflow:hidden;border:1px solid var(--line);border-radius:14px;background:var(--surface-2)}
+    .qty button{height:34px;background:color-mix(in srgb, var(--text) 8%, transparent);font-weight:900}
+    .qty span{text-align:center;font-weight:800;line-height:34px}
+    .cart{
+      position:sticky;top:92px;display:grid;gap:14px;padding:16px;
+      border:1px solid var(--line);border-radius:var(--radius);background:var(--surface-2);box-shadow:var(--shadow);
+    }
+    .cart h2{margin:0;font-size:20px}
+    .cart-empty,.empty-state{margin:0;color:var(--muted);line-height:1.8}
+    .cart-lines,.table-orders,.admin-list,.form-panel,.report-panel,.metric-card,.qr-card{display:grid;gap:10px}
+    .cart-line,.order-items li{
+      display:grid;gap:8px;padding:10px;border:1px solid var(--line);
+      border-radius:14px;background:color-mix(in srgb, var(--text) 4%, transparent);
+    }
+    .note-input,.field input,.field textarea,.field select{background:var(--surface-2)}
+    .total-row{align-items:center;padding-top:12px;border-top:1px solid var(--line);font-size:18px;font-weight:900}
+    .table-badge{
+      display:grid;grid-template-columns:46px auto;align-items:center;gap:10px;
+      min-height:56px;padding:6px 12px;border-radius:16px;color:var(--brand-strong);
+      background:var(--soft);border:1px solid color-mix(in srgb, var(--brand) 18%, var(--line));font-weight:800;
+    }
+    .table-badge img{width:40px;height:40px;border-radius:12px;object-fit:cover;background:#d8e4df}
+    .table-order-line{padding:10px;border-radius:14px;background:color-mix(in srgb, var(--text) 5%, transparent);font-size:13px}
+    .workspace{width:min(1360px,calc(100% - 24px));margin:24px auto 42px}
+    .orders-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+    .order-card{
+      display:grid;gap:12px;padding:14px;border:1px solid var(--line);border-radius:var(--radius);
+      background:var(--surface-2);box-shadow:var(--shadow);
+    }
+    .order-head{padding-bottom:10px;border-bottom:1px solid var(--line)}
+    .order-head strong{font-size:18px}
+    .status{display:inline-flex;align-items:center;min-height:28px;padding:0 10px;border-radius:999px;font-size:12px;font-weight:900;white-space:nowrap}
+    .status.new{color:#7c2d12;background:#ffedd5}
+    .status.confirmed{color:#075985;background:#e0f2fe}
+    .status.preparing{color:#854d0e;background:#fef3c7}
+    .status.ready{color:#166534;background:#dcfce7}
+    .status.delivered{color:#4b5563;background:#f3f4f6}
+    .order-items{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+    .order-items small{color:var(--muted);line-height:1.5}
+    .status-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}
+    .status-actions button{min-height:38px;border-radius:14px;background:color-mix(in srgb, var(--text) 7%, transparent);color:var(--text);font-weight:800}
+    .kitchen-board{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .kitchen-card{border-width:2px;border-color:#f0c36a}
+    .admin-layout,.tables-layout{display:grid;grid-template-columns:360px minmax(0,1fr);gap:18px;align-items:start}
+    .reports-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:18px}
+    .metric-card,.report-panel,.qr-card,.form-panel,.admin-list{
+      padding:16px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface-2);box-shadow:var(--shadow);
+    }
+    .metric-card span{color:var(--muted);font-size:13px;font-weight:700}
+    .metric-card strong{font-size:clamp(28px,4vw,44px);line-height:1.15}
+    .report-layout{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:18px;align-items:start}
+    .top-items{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+    .top-items li{display:grid;grid-template-columns:minmax(0,1fr) 88px;gap:10px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:14px;background:color-mix(in srgb, var(--text) 4%, transparent)}
+    .bar{height:9px;overflow:hidden;border-radius:999px;background:#dbe4ea}
+    .bar i{display:block;height:100%;border-radius:inherit;background:var(--accent)}
+    .qr-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    .qr-card{justify-items:center;text-align:center}
+    .qr-box{width:132px;aspect-ratio:1;border:8px solid #fff;background:#fff;border-radius:12px;overflow:hidden}
+    .qr-box img{width:100%;height:100%;object-fit:contain}
+    .qr-link{direction:ltr;font-size:11px;overflow-wrap:anywhere;color:var(--muted)}
+    .field{display:grid;gap:7px}
+    .field label{font-size:13px;font-weight:800;color:var(--muted)}
+    .admin-row{
+      display:grid;grid-template-columns:88px minmax(0,1fr) auto;gap:12px;align-items:center;
+      padding:10px;border:1px solid var(--line);border-radius:16px;background:color-mix(in srgb, var(--text) 4%, transparent);
+    }
+    .admin-thumb{width:88px;height:70px;overflow:hidden;border-radius:14px;background:#d8e4df}
+    .admin-thumb img{width:100%;height:100%;object-fit:cover}
+    .admin-row p{margin:0;font-size:13px;color:var(--muted);line-height:1.6}
+    .table-edit{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:center}
+    .toast{
+      position:fixed;inset-inline:18px;bottom:18px;z-index:40;display:none;
+      width:min(520px,calc(100% - 36px));margin-inline-start:auto;padding:14px 16px;
+      border-radius:16px;color:#fff;background:#111827;box-shadow:var(--shadow);line-height:1.7;
+    }
+    .toast.show{display:block}
+    @media print{
+      .topbar,.nav-shell,.hero,.cart,.toolbar-buttons,.admin-toolbar,.menu-tools,.reports-toolbar,.toast{display:none!important}
+      body{background:#fff;color:#000}
+      .page{display:none!important}
+      .page.active{display:block!important}
+      .workspace,.section-wrap{width:100%;margin:0}
+      .order-card,.metric-card,.report-panel,.qr-card{break-inside:avoid;box-shadow:none}
+    }
+    @media (max-width:1100px){
+      .main-grid,.admin-layout,.tables-layout,.report-layout{grid-template-columns:1fr}
+      .cart{position:static}
+      .orders-grid,.kitchen-board,.reports-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+    @media (max-width:760px){
+      .topbar,.nav-shell,.menu-tools,.orders-toolbar,.admin-toolbar,.tables-toolbar,.reports-toolbar{flex-direction:column;align-items:stretch}
+      .top-actions,.toolbar-buttons,.lang-switch{justify-content:space-between}
+      .menu-list,.orders-grid,.kitchen-board,.reports-grid,.qr-grid{grid-template-columns:1fr}
+      .item-card{grid-template-columns:112px minmax(0,1fr)}
+      .item-media{min-height:168px}
+      .admin-row,.table-edit{grid-template-columns:1fr}
+      .admin-thumb{width:100%;height:144px}
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">M</div>
+        <div class="brand-title">
+          <strong id="brandTitle" data-i18n="appTitle">منيو المطعم المتوسط</strong>
+          <span id="brandTagline" data-i18n="appTagline">منصة طلبات وإدارة مناسبة للهاتف والكمبيوتر والشاشات الكبيرة.</span>
+        </div>
+      </div>
+      <div class="top-actions">
+        <span class="role-pill" id="roleLabel">وضع الزبون</span>
+        <select class="toolbar-select" id="tableSelect" aria-label="Table"></select>
+        <div class="lang-switch" aria-label="Language switch">
+          <button class="chip" data-lang="ar" type="button">العربية</button>
+          <button class="chip" data-lang="ku" type="button">کوردی</button>
+          <button class="chip" data-lang="en" type="button">English</button>
+        </div>
+        <button class="ghost-btn" id="loginBtn" type="button" data-i18n="login">تسجيل الدخول</button>
+        <button class="ghost-btn hidden" id="logoutBtn" type="button" data-i18n="logout">تسجيل الخروج</button>
+      </div>
+    </header>
+
+    <nav class="nav-shell">
+      <div class="nav-tabs">
+        <button class="tab active" data-view="customer" type="button" data-i18n="nav.customer">الزبون</button>
+        <button class="tab auth" data-view="cashier" type="button" data-i18n="nav.cashier">الكاشير</button>
+        <button class="tab auth" data-view="kitchen" type="button" data-i18n="nav.kitchen">المطبخ</button>
+        <button class="tab admin-only" data-view="admin" type="button" data-i18n="nav.admin">إدارة المنيو</button>
+        <button class="tab admin-only" data-view="tables" type="button" data-i18n="nav.tables">الطاولات</button>
+        <button class="tab auth" data-view="reports" type="button" data-i18n="nav.reports">التقارير</button>
+      </div>
+    </nav>
+
+    <main>
+      <section id="customer" class="page active">
+        <div class="hero">
+          <div class="hero-content">
+            <div class="hero-badges">
+              <span class="hero-badge" data-i18n="hero.badge1">طلبات مباشرة من الطاولة</span>
+            </div>
+            <h1 data-i18n="hero.title">اطلب من طاولتك مباشرة</h1>
+            <p data-i18n="hero.subtitle">اختر الأصناف، عدل الكميات، أضف ملاحظاتك، وسيصل الطلب إلى الكاشير مرتبطًا برقم الطاولة.</p>
+          </div>
+        </div>
+
+        <div class="section-wrap">
+          <div class="menu-tools">
+            <div>
+              <h2 class="section-title" data-i18n="menu.title">قائمة الطعام</h2>
+              <p class="section-note" data-i18n="menu.subtitle">استخدم الفلاتر لتصفح الأصناف بسرعة ثم أضف ما تحتاجه إلى السلة.</p>
+            </div>
+            <div class="menu-filters" id="categoryTabs"></div>
+          </div>
+
+          <div class="main-grid">
+            <section class="stack">
+              <div id="menuList" class="menu-list"></div>
+            </section>
+
+            <aside class="cart">
+              <h2 data-i18n="cart.title">طلبك الحالي</h2>
+              <div id="cartLines" class="cart-lines"></div>
+              <p id="cartEmpty" class="cart-empty" data-i18n="cart.empty">لم تختر أي صنف بعد.</p>
+              <div class="total-row">
+                <span data-i18n="cart.total">الإجمالي</span>
+                <span id="cartTotal">0 د.ع</span>
+              </div>
+              <button class="primary-btn" id="submitOrder" disabled type="button" data-i18n="cart.submit">إرسال الطلب</button>
+              <button class="ghost-btn" id="clearCart" type="button" data-i18n="cart.clear">تفريغ السلة</button>
+              <div class="table-orders">
+                <h3 class="section-title" data-i18n="customer.orders">طلبات هذه الطاولة</h3>
+                <div id="customerOrders"></div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section id="cashier" class="page">
+        <div class="workspace">
+          <div class="orders-toolbar">
+            <div>
+              <h2 class="section-title" data-i18n="cashier.title">لوحة الكاشير</h2>
+              <div class="section-note" data-i18n="cashier.subtitle">كل طلب يظهر مع رقم الطاولة والوقت والتفاصيل.</div>
+            </div>
+            <div class="toolbar-buttons">
+              <button class="ghost-btn" id="enableNotifications" type="button" data-i18n="cashier.notifications">تفعيل الإشعارات</button>
+            </div>
+          </div>
+          <div class="orders-grid" id="cashierOrders"></div>
+        </div>
+      </section>
+
+      <section id="kitchen" class="page">
+        <div class="workspace">
+          <div class="orders-toolbar">
+            <div>
+              <h2 class="section-title" data-i18n="kitchen.title">لوحة المطبخ</h2>
+              <div class="section-note" data-i18n="kitchen.subtitle">الطلبات الجاهزة للتحضير تظهر هنا فقط.</div>
+            </div>
+            <div class="toolbar-buttons">
+              <button class="ghost-btn" id="printKitchen" type="button" data-i18n="kitchen.print">طباعة</button>
+            </div>
+          </div>
+          <div class="kitchen-board" id="kitchenOrders"></div>
+        </div>
+      </section>
+
+      <section id="admin" class="page">
+        <div class="workspace">
+          <div class="admin-toolbar">
+            <div>
+              <h2 class="section-title" data-i18n="admin.title">إدارة المنيو</h2>
+              <div class="section-note" data-i18n="admin.subtitle">أضف صنفًا جديدًا.</div>
+            </div>
+            <div class="toolbar-buttons">
+              <button class="ghost-btn" id="resetMenu" type="button" data-i18n="admin.reset">استرجاع المنيو الأساسي</button>
+            </div>
+          </div>
+
+          <div class="admin-layout">
+            <form class="form-panel" id="menuForm">
+              <div class="field">
+                <label for="itemName" data-i18n="form.itemName">اسم الطبق</label>
+                <input id="itemName" required>
+              </div>
+              <div class="field">
+                <label for="itemCategory" data-i18n="form.category">التصنيف</label>
+                <select id="itemCategory" required></select>
+              </div>
+              <div class="field">
+                <label for="itemPrice" data-i18n="form.price">السعر</label>
+                <input id="itemPrice" type="number" min="0" required>
+              </div>
+              <div class="field">
+                <label for="itemDesc" data-i18n="form.description">الوصف</label>
+                <textarea id="itemDesc" rows="3" required></textarea>
+              </div>
+              <div class="field">
+                <label for="itemImageFile" data-i18n="form.imageFile">رفع صورة محلية</label>
+                <input id="itemImageFile" type="file" accept="image/*" capture="environment">
+              </div>
+              <div class="field">
+                <label for="itemImageUrl" data-i18n="form.imageUrl">رابط صورة احتياطي</label>
+                <input id="itemImageUrl" placeholder="https://...">
+              </div>
+              <button class="primary-btn" type="submit" data-i18n="form.addItem">إضافة الصنف</button>
+            </form>
+            <div class="admin-list" id="adminList"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="tables" class="page">
+        <div class="workspace">
+          <div class="tables-toolbar">
+            <div>
+              <h2 class="section-title" data-i18n="tables.title">إدارة الطاولات والصور</h2>
+              <div class="section-note" data-i18n="tables.subtitle">يمكن حفظ صورة الطاولة محليًا داخل قاعدة البيانات أو على الخادم بشكل رابط داخلي.</div>
+            </div>
+          </div>
+          <div class="tables-layout">
+            <form class="form-panel" id="tableForm">
+              <div class="field">
+                <label for="tableNumber" data-i18n="form.tableNumber">رقم الطاولة</label>
+                <input id="tableNumber" required>
+              </div>
+              <div class="field">
+                <label for="tableImageFile" data-i18n="form.tableImageFile">رفع صورة الطاولة</label>
+                <input id="tableImageFile" type="file" accept="image/*" capture="environment">
+              </div>
+              <div class="field">
+                <label for="tableImageUrl" data-i18n="form.imageUrl">رابط صورة احتياطي</label>
+                <input id="tableImageUrl" placeholder="https://...">
+              </div>
+              <label class="role-pill" style="justify-content:flex-start">
+                <input id="tableActive" type="checkbox" checked> <span data-i18n="form.tableActive">الطاولة فعالة</span>
+              </label>
+              <button class="primary-btn" type="submit" data-i18n="form.addTable">إضافة طاولة</button>
+            </form>
+            <div class="admin-list" id="tablesList"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="reports" class="page">
+        <div class="workspace">
+          <div class="reports-toolbar">
+            <div>
+              <h2 class="section-title" data-i18n="reports.title">التقارير والإدارة</h2>
+              <div class="section-note" data-i18n="reports.subtitle">إحصائيات فورية، أكواد QR للطاولات، وخيارات النسخ الاحتياطي.</div>
+            </div>
+            <div class="toolbar-buttons">
+              <button class="ghost-btn" id="toggleDark" type="button" data-i18n="reports.dark">الوضع المظلم</button>
+              <button class="ghost-btn" id="syncData" type="button" data-i18n="reports.backup">نسخ احتياطي JSON</button>
+              <button class="primary-btn" id="exportPdf" type="button" data-i18n="reports.pdf">تصدير PDF</button>
+            </div>
+          </div>
+
+          <div class="reports-grid">
+            <div class="metric-card">
+              <span data-i18n="reports.totalOrders">إجمالي الطلبات</span>
+              <strong id="statOrders">0</strong>
+            </div>
+            <div class="metric-card">
+              <span data-i18n="reports.totalRevenue">إجمالي الإيرادات</span>
+              <strong id="statRevenue">0 د.ع</strong>
+            </div>
+            <div class="metric-card">
+              <span data-i18n="reports.average">متوسط قيمة الطلب</span>
+              <strong id="statAverage">0 د.ع</strong>
+            </div>
+          </div>
+
+          <div class="report-layout">
+            <section class="report-panel">
+              <h3 class="section-title" data-i18n="reports.topItems">الأصناف الأكثر طلبًا</h3>
+              <ul class="top-items" id="topItems"></ul>
+            </section>
+            <aside class="report-panel">
+              <h3 class="section-title" data-i18n="reports.qr">توليد QR للطاولات</h3>
+              <div class="field">
+                <label for="publicBaseUrl" data-i18n="reports.baseUrl">رابط الموقع الأساسي</label>
+                <input id="publicBaseUrl" dir="ltr">
+              </div>
+              <div class="field">
+                <label for="tableCount" data-i18n="reports.tableCount">عدد الطاولات</label>
+                <input id="tableCount" type="number" min="1" max="80" value="12">
+              </div>
+              <button class="ghost-btn" id="generateQr" type="button" data-i18n="reports.generate">توليد الأكواد</button>
+              <button class="ghost-btn" id="printQr" type="button" data-i18n="reports.print">طباعة الأكواد</button>
+              <div class="qr-grid" id="qrGrid"></div>
+            </aside>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const API_BASE = "";
+    const TABLE_PARAM = new URLSearchParams(location.search).get("table") || "1";
+    const languageLocales = { ar: "ar-IQ", en: "en-US", ku: "ckb-IQ" };
+    const rtlLanguages = new Set(["ar", "ku"]);
+    const categoryLabels = {
+      ar: {
+        "المقبلات": "المقبلات",
+        "الأطباق الرئيسية": "الأطباق الرئيسية",
+        "المشروبات": "المشروبات",
+        "الحلويات": "الحلويات",
+      },
+      en: {
+        "المقبلات": "Appetizers",
+        "الأطباق الرئيسية": "Main dishes",
+        "المشروبات": "Drinks",
+        "الحلويات": "Desserts",
+      },
+      ku: {
+        "المقبلات": "پێش‌خواردن",
+        "الأطباق الرئيسية": "خواردنی سەرەکی",
+        "المشروبات": "خواردنەوە",
+        "الحلويات": "شیرینی",
+      },
+    };
+    const categoryValues = ["المقبلات", "الأطباق الرئيسية", "المشروبات", "الحلويات"];
+    const translations = {
+      ar: {
+        appTitle: "منيو المطعم المتوسط",
+        appTagline: "منصة طلبات وإدارة مناسبة للهاتف والكمبيوتر والشاشات الكبيرة.",
+        login: "تسجيل الدخول",
+        logout: "تسجيل الخروج",
+        nav: { customer: "الزبون", cashier: "الكاشير", kitchen: "المطبخ", admin: "إدارة المنيو", tables: "الطاولات", reports: "التقارير" },
+        hero: {
+          badge1: "طلبات مباشرة من الطاولة",
+          badge2: "واجهة متوافقة مع كل الشاشات",
+          badge3: "صور محلية بدون روابط خارجية",
+          title: "اطلب من طاولتك مباشرة",
+          subtitle: "اختر الأصناف، عدل الكميات، أضف ملاحظاتك، وسيصل الطلب إلى الكاشير مرتبطًا برقم الطاولة.",
+        },
+        menu: { title: "قائمة الطعام", subtitle: "استخدم الفلاتر لتصفح الأصناف بسرعة ثم أضف ما تحتاجه إلى السلة.", add: "إضافة" },
+        cart: { title: "طلبك الحالي", empty: "لم تختر أي صنف بعد.", total: "الإجمالي", submit: "إرسال الطلب", clear: "تفريغ السلة" },
+        customer: { orders: "طلبات هذه الطاولة" },
+        cashier: { title: "لوحة الكاشير", subtitle: "كل طلب يظهر مع رقم الطاولة والوقت والتفاصيل.", notifications: "تفعيل الإشعارات", demo: "إضافة طلب تجريبي" },
+        kitchen: { title: "لوحة المطبخ", subtitle: "الطلبات الجاهزة للتحضير تظهر هنا فقط.", print: "طباعة" },
+        admin: { title: "إدارة المنيو", subtitle: "أضف صنفًا جديدًا مع صورة من الهاتف أو الكمبيوتر، أو من رابط احتياطي.", reset: "استرجاع المنيو الأساسي" },
+        tables: { title: "إدارة الطاولات والصور", subtitle: "يمكن حفظ صورة الطاولة محليًا داخل قاعدة البيانات أو على الخادم بشكل رابط داخلي." },
+        reports: {
+          title: "التقارير والإدارة",
+          subtitle: "إحصائيات فورية، أكواد QR للطاولات، وخيارات النسخ الاحتياطي.",
+          dark: "الوضع المظلم",
+          backup: "نسخ احتياطي JSON",
+          pdf: "تصدير PDF",
+          totalOrders: "إجمالي الطلبات",
+          totalRevenue: "إجمالي الإيرادات",
+          average: "متوسط قيمة الطلب",
+          topItems: "الأصناف الأكثر طلبًا",
+          qr: "توليد QR للطاولات",
+          baseUrl: "رابط الموقع الأساسي",
+          tableCount: "عدد الطاولات",
+          generate: "توليد الأكواد",
+          print: "طباعة الأكواد",
+        },
+        form: {
+          itemName: "اسم الطبق",
+          category: "التصنيف",
+          price: "السعر",
+          description: "الوصف",
+          imageFile: "رفع صورة محلية",
+          tableImageFile: "رفع صورة الطاولة",
+          imageUrl: "رابط صورة احتياطي",
+          addItem: "إضافة الصنف",
+          tableNumber: "رقم الطاولة",
+          tableActive: "الطاولة فعالة",
+          addTable: "إضافة طاولة",
+        },
+        status: {
+          new: "جديد",
+          confirmed: "تم الاستلام",
+          preparing: "قيد التحضير",
+          ready: "جاهز",
+          delivered: "تم التوصيل",
+        },
+        role: {
+          customer: "وضع الزبون",
+          admin: "الدخول: admin",
+          cashier: "الدخول: cashier",
+          kitchen: "الدخول: kitchen",
+        },
+        categoryAll: "الكل",
+        tableLabel: "طاولة",
+        noOrders: "لا توجد طلبات واردة حالياً.",
+        noKitchen: "لا توجد طلبات مرسلة للمطبخ الآن.",
+        noTableOrders: "لا توجد طلبات مرسلة من هذه الطاولة بعد.",
+        noItems: "لا توجد أصناف مطابقة لهذا الفلتر.",
+        noteEmpty: "بدون ملاحظات",
+        noteLabel: "ملاحظة",
+        qty: "الكمية",
+        total: "المجموع",
+        table: "الطاولة",
+        orderNumber: "رقم الطلب",
+        time: "الوقت",
+        item: "الصنف",
+        priceLabel: "السعر",
+        addToCart: "أضف للسلة",
+        save: "حفظ",
+        delete: "حذف",
+        active: "فعال",
+        uploadHint: "يمكنك رفع صورة من الهاتف أو الكمبيوتر",
+        toast: {
+          loginOk: "تم تسجيل الدخول.",
+          logoutOk: "تم تسجيل الخروج.",
+          notificationsOn: "تم تفعيل الإشعارات.",
+          notificationsOff: "لم يتم منح صلاحية الإشعارات.",
+          newItem: "تمت إضافة الصنف.",
+          menuReset: "تم استرجاع المنيو الأساسي.",
+          tableSaved: "تم حفظ الطاولة.",
+          tableAdded: "تمت إضافة الطاولة.",
+          tableDeleted: "تم حذف الطاولة.",
+          itemDeleted: "تم حذف الصنف.",
+          orderSent: "تم إرسال طلب الطاولة {table} إلى لوحة الكاشير.",
+          demoAdded: "تمت إضافة طلب تجريبي.",
+          statusUpdated: "تم تحديث حالة الطلب.",
+          qrGenerated: "تم توليد الأكواد.",
+          imageUploaded: "تم رفع الصورة بنجاح.",
+        },
+        prompt: { password: "كلمة المرور" },
+        error: {
+          unauthorized: "هذه الصفحة تحتاج تسجيل دخول.",
+          uploadFailed: "فشل رفع الصورة.",
+        },
+        misc: {
+          localUpload: "الصور المحلية تحفظ على الخادم كملفات داخلية.",
+        },
+      },
+      en: {
+        appTitle: "Al-Mutawassit Restaurant Menu",
+        appTagline: "Ordering and management for phones, laptops, and large displays.",
+        login: "Sign in",
+        logout: "Sign out",
+        nav: { customer: "Customer", cashier: "Cashier", kitchen: "Kitchen", admin: "Menu Admin", tables: "Tables", reports: "Reports" },
+        hero: {
+          badge1: "Direct table ordering",
+          badge2: "Responsive for every screen",
+          badge3: "Local images, no external links",
+          title: "Order directly from your table",
+          subtitle: "Pick dishes, adjust quantities, add notes, and the order reaches the cashier with the table number attached.",
+        },
+        menu: { title: "Menu", subtitle: "Use filters to browse quickly and add what you need to the cart.", add: "Add" },
+        cart: { title: "Current order", empty: "No items added yet.", total: "Total", submit: "Send order", clear: "Clear cart" },
+        customer: { orders: "Orders for this table" },
+        cashier: { title: "Cashier board", subtitle: "Every order appears with table number, time, and details.", notifications: "Enable notifications", demo: "Add demo order" },
+        kitchen: { title: "Kitchen board", subtitle: "Only orders ready for preparation appear here.", print: "Print" },
+        admin: { title: "Menu management", subtitle: "Add a new item with a phone/desktop image or a fallback link.", reset: "Restore default menu" },
+        tables: { title: "Table and image management", subtitle: "You can store table images locally in the database or on the server as an internal link." },
+        reports: {
+          title: "Reports and management",
+          subtitle: "Live metrics, QR codes for tables, and backup options.",
+          dark: "Dark mode",
+          backup: "JSON backup",
+          pdf: "Export PDF",
+          totalOrders: "Total orders",
+          totalRevenue: "Total revenue",
+          average: "Average order value",
+          topItems: "Top selling items",
+          qr: "Generate table QR",
+          baseUrl: "Base site URL",
+          tableCount: "Table count",
+          generate: "Generate codes",
+          print: "Print codes",
+        },
+        form: {
+          itemName: "Dish name",
+          category: "Category",
+          price: "Price",
+          description: "Description",
+          imageFile: "Upload local image",
+          tableImageFile: "Upload table image",
+          imageUrl: "Fallback image URL",
+          addItem: "Add item",
+          tableNumber: "Table number",
+          tableActive: "Table is active",
+          addTable: "Add table",
+        },
+        status: {
+          new: "New",
+          confirmed: "Confirmed",
+          preparing: "Preparing",
+          ready: "Ready",
+          delivered: "Delivered",
+        },
+        role: {
+          customer: "Customer mode",
+          admin: "Signed in: admin",
+          cashier: "Signed in: cashier",
+          kitchen: "Signed in: kitchen",
+        },
+        categoryAll: "All",
+        tableLabel: "Table",
+        noOrders: "No orders yet.",
+        noKitchen: "No kitchen orders right now.",
+        noTableOrders: "No orders from this table yet.",
+        noItems: "No items match this filter.",
+        noteEmpty: "No notes",
+        noteLabel: "Note",
+        qty: "Qty",
+        total: "Total",
+        table: "Table",
+        orderNumber: "Order no.",
+        time: "Time",
+        item: "Item",
+        priceLabel: "Price",
+        addToCart: "Add to cart",
+        save: "Save",
+        delete: "Delete",
+        active: "Active",
+        uploadHint: "You can upload an image from phone or desktop",
+        toast: {
+          loginOk: "Signed in successfully.",
+          logoutOk: "Signed out successfully.",
+          notificationsOn: "Notifications enabled.",
+          notificationsOff: "Notification permission was not granted.",
+          newItem: "Item added.",
+          menuReset: "Default menu restored.",
+          tableSaved: "Table saved.",
+          tableAdded: "Table added.",
+          tableDeleted: "Table deleted.",
+          itemDeleted: "Item deleted.",
+          orderSent: "Table {table} order sent to the cashier board.",
+          demoAdded: "Demo order added.",
+          statusUpdated: "Order status updated.",
+          qrGenerated: "Codes generated.",
+          imageUploaded: "Image uploaded successfully.",
+        },
+        prompt: { password: "Password" },
+        error: {
+          unauthorized: "This page requires sign-in.",
+          uploadFailed: "Image upload failed.",
+        },
+        misc: {
+          localUpload: "Local images are stored on the server as internal files.",
+        },
+      },
+      ku: {
+        appTitle: "لیستی چێشتخانەی ناوەندی",
+        appTagline: "سیستەمی داواکاری و بەڕێوەبردن بۆ مۆبایل، لەپتۆپ و شاشە گەورەکان.",
+        login: "چوونەژوورەوە",
+        logout: "دەرچوون",
+        nav: { customer: "کڕیار", cashier: "کاشیر", kitchen: "چێشتخانە", admin: "بەڕێوەبردنی لیست", tables: "مێزەکان", reports: "ڕاپۆرتەکان" },
+        hero: {
+          badge1: "فەرمانی ڕاستەوخۆ لەسەر مێز",
+          badge2: "ڕووکار بۆ هەموو قەبارەی شاشەکان",
+          badge3: "وێنەی ناوخۆیی، بێ لینکە دەرەکی",
+          title: "لەسەر مێزەکەت ڕاستەوخۆ داوا بکە",
+          subtitle: "خواردنەکان هەڵبژێرە، قەبارە بگۆڕە، تێبینی زیاد بکە، و داواکارییەکە بە ناوی ژمارەی مێزەکە دەگاتە کاشیر.",
+        },
+        menu: { title: "لیستی خواردن", subtitle: "فلتەرەکان بەکاربهێنە بۆ گەڕانێکی خێرا و زیادکردنی پێویستەکان بۆ سەبەتە.", add: "زیادکردن" },
+        cart: { title: "داواکاریی ئێستا", empty: "هێشتا هیچ شتێک زیاد نەکراوە.", total: "کۆی گشتی", submit: "ناردنی داواکاری", clear: "پاککردنەوەی سەبەتە" },
+        customer: { orders: "داواکارییەکانی ئەم مێزە" },
+        cashier: { title: "تابلۆی کاشیر", subtitle: "هەر داواکارییەک بە ژمارەی مێز، کات و وردەکاری پیشان دەدرێت.", notifications: "کاراکردنی ئاگادارییەکان", demo: "زیادکردنی داواکاریی نمونەیی" },
+        kitchen: { title: "تابلۆی چێشتخانە", subtitle: "تەنها داواکارییەکانی ئامادەکردن لێرە دەردەکەون.", print: "چاپکردن" },
+        admin: { title: "بەڕێوەبردنی لیست", subtitle: "خواردنێکی نوێ زیاد بکە بە وێنەی مۆبایل/لەپتۆپ یان لینکێکی جێگرەوە.", reset: "گەڕاندنەوەی لیستی بنەڕەتی" },
+        tables: { title: "بەڕێوەبردنی مێز و وێنەکان", subtitle: "دەتوانیت وێنەی مێزەکان بە شێوەی ناوخۆیی لە داتابەیس یان سێرڤەر هەڵبگریت." },
+        reports: {
+          title: "ڕاپۆرت و بەڕێوەبردن",
+          subtitle: "ئامارە زیندووەکان، QR بۆ مێزەکان، و هەڵبژاردەکانی پشتیوانی.",
+          dark: "دۆخی تاریک",
+          backup: "پشتیوانی JSON",
+          pdf: "دەرهێنانی PDF",
+          totalOrders: "کۆی داواکارییەکان",
+          totalRevenue: "کۆی داهات",
+          average: "نرخی ناوەندی داواکاری",
+          topItems: "زۆرترین خواردنی داواکراو",
+          qr: "تولیدکردنی QR بۆ مێزەکان",
+          baseUrl: "بەستەری بنەڕەتی ماڵپەڕ",
+          tableCount: "ژمارەی مێزەکان",
+          generate: "تولیدکردنی کۆدەکان",
+          print: "چاپکردنی کۆدەکان",
+        },
+        form: {
+          itemName: "ناوی خواردن",
+          category: "جۆر",
+          price: "نرخ",
+          description: "وەسف",
+          imageFile: "بارکردنی وێنەی ناوخۆیی",
+          tableImageFile: "بارکردنی وێنەی مێز",
+          imageUrl: "لینکی جێگرەوەی وێنە",
+          addItem: "زیادکردنی خواردن",
+          tableNumber: "ژمارەی مێز",
+          tableActive: "مێزەکە چالاکە",
+          addTable: "زیادکردنی مێز",
+        },
+        status: {
+          new: "نوێ",
+          confirmed: "پەسەندکراو",
+          preparing: "ئامادەکردن",
+          ready: "ئامادە",
+          delivered: "گەیەنراو",
+        },
+        role: {
+          customer: "دۆخی کڕیار",
+          admin: "چوونەژوورەوە: admin",
+          cashier: "چوونەژوورەوە: cashier",
+          kitchen: "چوونەژوورەوە: kitchen",
+        },
+        categoryAll: "هەموو",
+        tableLabel: "مێز",
+        noOrders: "هیچ داواکارییەک نییە.",
+        noKitchen: "ئێستا داواکاری بۆ چێشتخانە نییە.",
+        noTableOrders: "هێشتا داواکارییەک لە ئەم مێزەوە نەهاتۆتەوە.",
+        noItems: "هیچ شتێک لەگەڵ ئەم فلتەرە هاوشێوە نییە.",
+        noteEmpty: "بێ تێبینی",
+        noteLabel: "تێبینی",
+        qty: "ژمارە",
+        total: "کۆ",
+        table: "مێز",
+        orderNumber: "ژمارەی داواکاری",
+        time: "کات",
+        item: "خواردن",
+        priceLabel: "نرخ",
+        addToCart: "زیادکردن بۆ سەبەتە",
+        save: "پاشەکەوتکردن",
+        delete: "سڕینەوە",
+        active: "چالاک",
+        uploadHint: "دەتوانیت وێنە لە مۆبایل یان لەپتۆپ بار بکەیت",
+        toast: {
+          loginOk: "چوونەژوورەوە سەرکەوتوو بوو.",
+          logoutOk: "دەرچوون سەرکەوتوو بوو.",
+          notificationsOn: "ئاگادارییەکان چالاک کران.",
+          notificationsOff: "ڕێگەپێدان بە ئاگاداری نەدرا.",
+          newItem: "خواردنەکە زیادکرا.",
+          menuReset: "لیستی بنەڕەتی گەڕێندرایەوە.",
+          tableSaved: "مێزەکە پاشەکەوت کرا.",
+          tableAdded: "مێزەکە زیادکرا.",
+          tableDeleted: "مێزەکە سڕدرایەوە.",
+          itemDeleted: "خواردنەکە سڕدرایەوە.",
+          orderSent: "داواکاریی مێز {table} نێردرا بۆ تابلۆی کاشیر.",
+          demoAdded: "داواکاریی نمونەیی زیادکرا.",
+          statusUpdated: "دۆخی داواکاری نوێکرایەوە.",
+          qrGenerated: "کۆدەکان دروستکران.",
+          imageUploaded: "وێنەکە بە سەرکەوتوویی بارکرایەوە.",
+        },
+        prompt: { password: "وشەی نهێنی" },
+        error: {
+          unauthorized: "ئەم پەڕەیە پێویستی بە چوونەژوورەوە هەیە.",
+          uploadFailed: "بارکردنی وێنە سەرکەوتوو نەبوو.",
+        },
+        misc: {
+          localUpload: "وێنە ناوخۆییەکان وەک فایلێکی سێرڤەری ناوخۆیی هەڵدەگیرێن.",
+        },
+      },
+    };
+
+    const state = {
+      view: "customer",
+      role: null,
+      username: null,
+      lang: localStorage.getItem("med-lang") || "ar",
+      category: "all",
+      table: TABLE_PARAM,
+      cart: {},
+      menu: [],
+      tables: [],
+      orders: [],
+      reports: { totalOrders: 0, totalRevenue: 0, average: 0, topItems: [] },
+      dark: localStorage.getItem("med-dark") === "true",
+    };
+
+    const els = {
+      pages: document.querySelectorAll(".page"),
+      tabs: document.querySelectorAll(".tab"),
+      authTabs: document.querySelectorAll(".auth"),
+      adminTabs: document.querySelectorAll(".admin-only"),
+      roleLabel: $("roleLabel"),
+      loginBtn: $("loginBtn"),
+      logoutBtn: $("logoutBtn"),
+      tableSelect: $("tableSelect"),
+      categoryTabs: $("categoryTabs"),
+      menuList: $("menuList"),
+      cartLines: $("cartLines"),
+      cartEmpty: $("cartEmpty"),
+      customerOrders: $("customerOrders"),
+      cartTotal: $("cartTotal"),
+      submitOrder: $("submitOrder"),
+      cashierOrders: $("cashierOrders"),
+      kitchenOrders: $("kitchenOrders"),
+      adminList: $("adminList"),
+      tablesList: $("tablesList"),
+      topItems: $("topItems"),
+      statOrders: $("statOrders"),
+      statRevenue: $("statRevenue"),
+      statAverage: $("statAverage"),
+      qrGrid: $("qrGrid"),
+      toast: $("toast"),
+      publicBaseUrl: $("publicBaseUrl"),
+      brandTitle: $("brandTitle"),
+      brandTagline: $("brandTagline"),
+      itemCategory: $("itemCategory"),
+    };
+
+    function dict(key) {
+      return t(key);
+    }
+
+    function t(path, vars = {}) {
+      const parts = path.split(".");
+      let value = translations[state.lang];
+      for (const part of parts) value = value?.[part];
+      if (value == null) {
+        value = translations.ar;
+        for (const part of parts) value = value?.[part];
+      }
+      if (typeof value !== "string") return path;
+      return value.replace(/\{(\w+)\}/g, (_, key) => vars[key] ?? "");
+    }
+
+    function locale() {
+      return languageLocales[state.lang] || "ar-IQ";
+    }
+
+    function isRtl() {
+      return rtlLanguages.has(state.lang);
+    }
+
+    function formatPrice(value) {
+      return `${new Intl.NumberFormat(locale()).format(Number(value) || 0)} ${state.lang === "en" ? "IQD" : "د.ع"}`;
+    }
+
+    function formatDate(value) {
+      return new Intl.DateTimeFormat(locale(), { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
+    }
+
+    function formatTime(value) {
+      return new Intl.DateTimeFormat(locale(), { hour: "2-digit", minute: "2-digit" }).format(new Date(value));
+    }
+
+    function toast(message) {
+      els.toast.textContent = message;
+      els.toast.classList.add("show");
+      clearTimeout(toast.timer);
+      toast.timer = setTimeout(() => els.toast.classList.remove("show"), 2600);
+    }
+
+    function applyLanguage() {
+      document.documentElement.lang = state.lang === "ku" ? "ku" : state.lang;
+      document.documentElement.dir = isRtl() ? "rtl" : "ltr";
+      document.title = dict("appTitle");
+      els.brandTitle.textContent = dict("appTitle");
+      els.brandTagline.textContent = dict("appTagline");
+      document.querySelectorAll("[data-i18n]").forEach((node) => {
+        const key = node.dataset.i18n;
+        node.textContent = t(key);
+      });
+      document.querySelectorAll("[data-i18n-placeholder]").forEach((node) => {
+        node.placeholder = t(node.dataset.i18nPlaceholder);
+      });
+      document.querySelectorAll("[data-lang]").forEach((button) => {
+        button.classList.toggle("active", button.dataset.lang === state.lang);
+      });
+    }
+
+    function applyTheme() {
+      document.body.classList.toggle("dark", state.dark);
+    }
+
+    function canStaff() {
+      return ["admin", "cashier", "kitchen"].includes(state.role);
+    }
+
+    function canAdmin() {
+      return state.role === "admin";
+    }
+
+    function applyAuth() {
+      els.authTabs.forEach((tab) => tab.classList.toggle("hidden", !canStaff()));
+      els.adminTabs.forEach((tab) => tab.classList.toggle("hidden", !canAdmin()));
+      els.loginBtn.classList.toggle("hidden", canStaff());
+      els.logoutBtn.classList.toggle("hidden", !canStaff());
+      els.roleLabel.textContent = state.role ? dict(`role.${state.role}`) : dict("role.customer");
+      if (!canStaff() && ["cashier", "kitchen", "reports"].includes(state.view)) setView("customer");
+      if (!canAdmin() && ["admin", "tables"].includes(state.view)) setView("customer");
+    }
+
+    function setView(view) {
+      if ((["cashier", "kitchen", "reports"].includes(view) && !canStaff()) || (["admin", "tables"].includes(view) && !canAdmin())) {
+        toast(t("error.unauthorized"));
+        view = "customer";
+      }
+      state.view = view;
+      els.pages.forEach((page) => page.classList.toggle("active", page.id === view));
+      els.tabs.forEach((tab) => tab.classList.toggle("active", tab.dataset.view === view));
+      render();
+    }
+
+    async function api(path, options = {}) {
+      const response = await fetch(`${API_BASE}${path}`, {
+        credentials: "include",
+        headers: options.body instanceof FormData ? undefined : { "Content-Type": "application/json" },
+        ...options,
+      });
+      const text = await response.text();
+      const data = text ? JSON.parse(text) : {};
+      if (!response.ok) throw new Error(data.error || response.statusText);
+      return data;
+    }
+
+    async function uploadImage(file) {
+      const form = new FormData();
+      form.append("file", file);
+      const response = await fetch(`${API_BASE}/api/uploads`, {
+        method: "POST",
+        credentials: "include",
+        body: form,
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || t("error.uploadFailed"));
+      return data.url;
+    }
+
+    function getTableFromUrl() {
+      return new URLSearchParams(location.search).get("table") || state.table || "1";
+    }
+
+    function categoriesList() {
+      const categories = Array.from(new Set(state.menu.map((item) => item.category).filter(Boolean)));
+      return ["all", ...categories];
+    }
+
+    function categoryLabel(category) {
+      if (category === "all") return dict("categoryAll");
+      return categoryLabels[state.lang]?.[category] || category;
+    }
+
+    function renderCategorySelect() {
+      const previous = els.itemCategory.value || categoryValues[0];
+      els.itemCategory.innerHTML = categoryValues.map((value) => `<option value="${value}">${categoryLabel(value)}</option>`).join("");
+      els.itemCategory.value = categoryValues.includes(previous) ? previous : categoryValues[0];
+    }
+
+    function menuImage(src, alt) {
+      if (!src) return `<div class="item-media"></div>`;
+      return `<div class="item-media"><img src="${src}" alt="${alt || ""}"></div>`;
+    }
+
+    function renderCategories() {
+      const chips = categoriesList().map((category) => {
+        const active = state.category === category ? "active" : "";
+        return `<button class="chip ${active}" data-category="${category}" type="button">${categoryLabel(category)}</button>`;
+      }).join("");
+      els.categoryTabs.innerHTML = chips;
+    }
+
+    function renderTableSelect() {
+      els.tableSelect.innerHTML = state.tables.length
+        ? state.tables.map((table) => `<option value="${table.number}" ${String(table.number) === String(state.table) ? "selected" : ""}>${dict("tableLabel")} ${table.number}</option>`).join("")
+        : `<option value="${state.table}">${dict("tableLabel")} ${state.table}</option>`;
+    }
+
+    function renderMenu() {
+      const items = state.category === "all" ? state.menu : state.menu.filter((item) => item.category === state.category);
+      els.menuList.innerHTML = items.length ? items.map((item) => `
+        <article class="item-card">
+          ${menuImage(item.image, item.name)}
+          <div class="item-body">
+            <div class="item-title-row">
+              <div>
+                <h3>${item.name}</h3>
+                <div class="desc">${categoryLabel(item.category)}</div>
+              </div>
+              <div class="price">${formatPrice(item.price)}</div>
+            </div>
+            <p class="desc">${item.description || ""}</p>
+            <div class="item-actions">
+              <div class="qty">
+                <button type="button" data-dec="${item.id}">-</button>
+                <span>${state.cart[item.id]?.qty || 0}</span>
+                <button type="button" data-inc="${item.id}">+</button>
+              </div>
+              <button class="primary-btn" type="button" data-inc="${item.id}">${t("addToCart")}</button>
+            </div>
+          </div>
+        </article>
+      `).join("") : `<div class="empty-state">${t("noItems")}</div>`;
+    }
+
+    function renderCart() {
+      const lines = Object.values(state.cart);
+      els.cartLines.innerHTML = lines.map((line) => `
+        <div class="cart-line">
+          <div class="line-head">
+            <strong>${line.name}</strong>
+            <span class="price">${formatPrice(line.price * line.qty)}</span>
+          </div>
+          <div class="qty">
+            <button type="button" data-dec="${line.id}">-</button>
+            <span>${line.qty}</span>
+            <button type="button" data-inc="${line.id}">+</button>
+          </div>
+          <input class="note-input" data-note="${line.id}" value="${line.note || ""}" placeholder="${t("noteLabel")}">
+        </div>
+      `).join("");
+      els.cartEmpty.classList.toggle("hidden", lines.length > 0);
+      els.submitOrder.disabled = !lines.length;
+      const total = lines.reduce((sum, line) => sum + (line.price * line.qty), 0);
+      els.cartTotal.textContent = formatPrice(total);
+    }
+
+    function renderOrders() {
+      const cashier = state.orders.length
+        ? state.orders.map((order) => orderCard(order, false)).join("")
+        : `<div class="empty-state">${t("noOrders")}</div>`;
+      els.cashierOrders.innerHTML = cashier;
+
+      const kitchenOrders = state.orders.filter((order) => ["confirmed", "preparing"].includes(order.status));
+      els.kitchenOrders.innerHTML = kitchenOrders.length
+        ? kitchenOrders.map((order) => orderCard(order, true)).join("")
+        : `<div class="empty-state">${t("noKitchen")}</div>`;
+
+      const tableOrders = (canStaff() ? state.orders.filter((order) => String(order.table) === String(state.table)) : state.orders).slice(0, 4);
+      els.customerOrders.innerHTML = tableOrders.length
+        ? tableOrders.map((order) => `
+          <div class="table-order-line">
+            <span>${formatTime(order.createdAt)}</span>
+            <span class="status ${order.status}">${t(`status.${order.status}`)}</span>
+          </div>
+        `).join("")
+        : `<p class="cart-empty">${t("noTableOrders")}</p>`;
+    }
+
+    function orderCard(order, kitchen = false) {
+      const actions = kitchen
+        ? `<button type="button" data-status="${order.id}:ready">${t("status.ready")}</button>`
+        : `
+          <button type="button" data-status="${order.id}:confirmed">${t("status.confirmed")}</button>
+          <button type="button" data-status="${order.id}:preparing">${t("status.preparing")}</button>
+          <button type="button" data-status="${order.id}:ready">${t("status.ready")}</button>
+          <button type="button" data-status="${order.id}:delivered">${t("status.delivered")}</button>
+        `;
+      return `
+        <article class="order-card ${kitchen ? "kitchen-card" : ""}">
+          <div class="order-head">
+            <div>
+              <strong>${dict("tableLabel")} ${order.table}</strong>
+              <div class="section-note">${formatDate(order.createdAt)}</div>
+            </div>
+            <span class="status ${order.status}">${t(`status.${order.status}`)}</span>
+          </div>
+          <ul class="order-items">
+            ${order.items.map((item) => `
+              <li>
+                <div class="line-head">
+                  <strong>${item.name} × ${item.qty}</strong>
+                  <span class="price">${formatPrice(item.price * item.qty)}</span>
+                </div>
+                <small>${item.note ? `${t("noteLabel")}: ${item.note}` : t("noteEmpty")}</small>
+              </li>
+            `).join("")}
+          </ul>
+          <div class="total-row">
+            <span>${t("total")}</span>
+            <span>${formatPrice(order.total)}</span>
+          </div>
+          <div class="status-actions">${actions}</div>
+          ${kitchen ? "" : `<button class="ghost-btn" type="button" data-print-order="${order.id}">PDF</button>`}
+        </article>
+      `;
+    }
+
+    function renderAdmin() {
+      els.adminList.innerHTML = state.menu.map((item) => `
+        <div class="admin-row">
+          <div class="admin-thumb">${item.image ? `<img src="${item.image}" alt="${item.name}">` : ""}</div>
+          <div>
+            <h3>${item.name}</h3>
+            <p>${categoryLabel(item.category)} - ${formatPrice(item.price)}</p>
+            <p>${item.description || ""}</p>
+          </div>
+          <button class="danger-btn" type="button" data-delete-item="${item.id}">${t("delete")}</button>
+        </div>
+      `).join("");
+    }
+
+    function renderTables() {
+      els.tablesList.innerHTML = state.tables.map((table) => `
+        <div class="admin-row">
+          <div class="admin-thumb">${table.image ? `<img src="${table.image}" alt="">` : ""}</div>
+          <div class="table-edit">
+            <input data-table-number="${table.id}" value="${table.number}">
+            <input data-table-image="${table.id}" value="${table.image || ""}" placeholder="URL / Base64 / internal path">
+            <label class="role-pill" style="justify-content:flex-start"><input data-table-active="${table.id}" type="checkbox" ${table.active ? "checked" : ""}> ${t("active")}</label>
+          </div>
+          <div class="toolbar-buttons">
+            <button class="ghost-btn" type="button" data-save-table="${table.id}">${t("save")}</button>
+            <button class="danger-btn" type="button" data-delete-table="${table.id}">${t("delete")}</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function renderReports() {
+      els.statOrders.textContent = new Intl.NumberFormat(locale()).format(state.reports.totalOrders || 0);
+      els.statRevenue.textContent = formatPrice(state.reports.totalRevenue || 0);
+      els.statAverage.textContent = formatPrice(state.reports.average || 0);
+      els.topItems.innerHTML = state.reports.topItems.length
+        ? state.reports.topItems.map((item) => `
+          <li>
+            <div>
+              <strong>${item.name}</strong>
+              <div class="bar"><i style="width:${Math.min(100, (item.qty / Math.max(1, state.reports.topItems[0]?.qty || 1)) * 100)}%"></i></div>
+            </div>
+            <span>${new Intl.NumberFormat(locale()).format(item.qty)}</span>
+          </li>
+        `).join("")
+        : `<li class="empty-state">${t("noOrders")}</li>`;
+    }
+
+    function printOrder(orderId) {
+      const order = state.orders.find((entry) => String(entry.id) === String(orderId));
+      if (!order) return;
+      const rows = order.items.map((item) => `<tr><td>${item.name}</td><td>${item.qty}</td><td>${item.note || "-"}</td><td>${formatPrice(item.price * item.qty)}</td></tr>`).join("");
+      const win = open("", "_blank", "width=420,height=640");
+      if (!win) return;
+      win.document.write(`<!doctype html>
+        <html lang="${state.lang}" dir="${isRtl() ? "rtl" : "ltr"}">
+        <head>
+          <meta charset="utf-8">
+          <title>${t("orderNumber")} ${order.id}</title>
+          <style>
+            body{font-family:Tahoma,Arial,sans-serif;padding:18px;color:#111}
+            table{width:100%;border-collapse:collapse;margin-top:14px}
+            th,td{border-bottom:1px solid #ddd;padding:8px 4px;text-align:${isRtl() ? "right" : "left"}}
+            .total{margin-top:16px;font-size:18px;font-weight:800}
+          </style>
+        </head>
+        <body>
+          <h1>${dict("appTitle")}</h1>
+          <div>${t("orderNumber")}: ${order.id}</div>
+          <div>${t("table")}: ${order.table}</div>
+          <div>${t("time")}: ${formatDate(order.createdAt)}</div>
+          <table>
+            <thead><tr><th>${t("item")}</th><th>${t("qty")}</th><th>${t("noteLabel")}</th><th>${t("priceLabel")}</th></tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+          <div class="total">${t("total")}: ${formatPrice(order.total)}</div>
+          <script>window.print();<\/script>
+        </body></html>`);
+      win.document.close();
+    }
+
+    function qrUrlFor(table) {
+      const raw = els.publicBaseUrl.value.trim() || `${location.origin}${location.pathname}`;
+      const url = new URL(raw, location.href);
+      url.searchParams.set("table", table);
+      url.hash = "";
+      return url.toString();
+    }
+
+    function renderQrCodes(force = true) {
+      if (!force && els.qrGrid.children.length) return;
+      const count = Math.min(80, Math.max(1, Number($("tableCount").value) || 1));
+      els.qrGrid.innerHTML = Array.from({ length: count }, (_, index) => {
+        const table = index + 1;
+        const link = qrUrlFor(table);
+        const src = `https://api.qrserver.com/v1/create-qr-code/?size=260x260&margin=16&data=${encodeURIComponent(link)}`;
+        return `
+          <div class="qr-card">
+            <strong>${dict("tableLabel")} ${table}</strong>
+            <div class="qr-box"><img src="${src}" alt="QR ${table}"></div>
+            <div class="qr-link">${link}</div>
+          </div>
+        `;
+      }).join("");
+      toast(t("toast.qrGenerated"));
+    }
+
+    function changeQty(id, delta) {
+      const item = state.menu.find((entry) => String(entry.id) === String(id));
+      if (!item) return;
+      const current = state.cart[id] || { id: item.id, name: item.name, price: item.price, qty: 0, note: "" };
+      current.qty += delta;
+      if (current.qty <= 0) delete state.cart[id];
+      else state.cart[id] = current;
+      render();
+    }
+
+    async function submitOrder() {
+      const items = Object.values(state.cart);
+      if (!items.length) return;
+      await api("/api/orders", {
+        method: "POST",
+        body: JSON.stringify({ table: state.table, items }),
+      });
+      state.cart = {};
+      await refreshOrders();
+      render();
+      toast(t("toast.orderSent", { table: state.table }));
+    }
+
+    async function refreshBootstrap() {
+      const data = await api("/api/bootstrap");
+      state.role = data.user?.role || null;
+      state.username = data.user?.username || null;
+      state.dark = data.dark === "true";
+      state.menu = data.menu || [];
+      state.tables = data.tables || [];
+      if (!state.table && state.tables[0]) state.table = String(state.tables[0].number);
+      if (!state.menu.some((item) => item.category === state.category) && state.category !== "all") state.category = "all";
+      if (!state.table && state.tables.length) state.table = String(state.tables[0].number);
+      if (String(state.table) !== String(TABLE_PARAM) && TABLE_PARAM) state.table = String(TABLE_PARAM);
+      els.publicBaseUrl.value = location.protocol === "file:" ? "http://localhost:5000/" : `${location.origin}${location.pathname}`;
+      $("tableCount").value = Math.max(1, state.tables.filter((table) => table.active).length || state.tables.length || 1);
+      applyTheme();
+      applyLanguage();
+      applyAuth();
+      render();
+    }
+
+    async function refreshTables() {
+      state.tables = await api("/api/tables");
+      $("tableCount").value = Math.max(1, state.tables.filter((table) => table.active).length || state.tables.length || 1);
+      render();
+    }
+
+    async function ensureTableCount(targetCount) {
+      const desired = Math.max(1, Number(targetCount) || 1);
+      if (!canAdmin()) return;
+      const existing = new Set(state.tables.map((table) => String(table.number)));
+      let changed = false;
+      for (let number = 1; number <= desired; number += 1) {
+        if (!existing.has(String(number))) {
+          await api("/api/tables", {
+            method: "POST",
+            body: JSON.stringify({ number: String(number), image: "", active: true }),
+          });
+          changed = true;
+        }
+      }
+      if (changed) await refreshTables();
+    }
+
+    async function refreshOrders() {
+      if (canStaff()) {
+        state.orders = await api("/api/orders");
+      } else if (state.table) {
+        state.orders = await api(`/api/orders/recent?table=${encodeURIComponent(state.table)}`);
+      } else {
+        state.orders = [];
+      }
+    }
+
+    async function refreshReports() {
+      if (!canStaff()) return;
+      state.reports = await api("/api/reports");
+    }
+
+    function render() {
+      applyLanguage();
+      applyTheme();
+      applyAuth();
+      renderTableSelect();
+      renderCategorySelect();
+      renderCategories();
+      renderMenu();
+      renderCart();
+      renderOrders();
+      renderAdmin();
+      renderTables();
+      renderReports();
+    }
+
+    document.addEventListener("click", async (event) => {
+      try {
+        const tab = event.target.closest("[data-view]");
+        if (tab) return setView(tab.dataset.view);
+
+        const lang = event.target.closest("[data-lang]");
+        if (lang) {
+          state.lang = lang.dataset.lang;
+          localStorage.setItem("med-lang", state.lang);
+          render();
+          return;
+        }
+
+        const cat = event.target.closest("[data-category]");
+        if (cat) {
+          state.category = cat.dataset.category;
+          render();
+          return;
+        }
+
+        const inc = event.target.closest("[data-inc]");
+        if (inc) return changeQty(inc.dataset.inc, 1);
+
+        const dec = event.target.closest("[data-dec]");
+        if (dec) return changeQty(dec.dataset.dec, -1);
+
+        const status = event.target.closest("[data-status]");
+        if (status) {
+          const [id, next] = status.dataset.status.split(":");
+          await api(`/api/orders/${id}/status`, { method: "PATCH", body: JSON.stringify({ status: next }) });
+          await refreshOrders();
+          await refreshReports();
+          render();
+          return toast(t("toast.statusUpdated"));
+        }
+
+        const deleteItem = event.target.closest("[data-delete-item]");
+        if (deleteItem) {
+          await api(`/api/menu/${deleteItem.dataset.deleteItem}`, { method: "DELETE" });
+          state.menu = await api("/api/menu");
+          render();
+          return toast(t("toast.itemDeleted"));
+        }
+
+        const printBtn = event.target.closest("[data-print-order]");
+        if (printBtn) return printOrder(printBtn.dataset.printOrder);
+
+        const saveTable = event.target.closest("[data-save-table]");
+        if (saveTable) {
+          const id = saveTable.dataset.saveTable;
+          await api(`/api/tables/${id}`, {
+            method: "PUT",
+            body: JSON.stringify({
+              number: document.querySelector(`[data-table-number="${id}"]`).value,
+              image: document.querySelector(`[data-table-image="${id}"]`).value,
+              active: document.querySelector(`[data-table-active="${id}"]`).checked,
+            }),
+          });
+          await refreshTables();
+          return toast(t("toast.tableSaved"));
+        }
+
+        const deleteTable = event.target.closest("[data-delete-table]");
+        if (deleteTable) {
+          await api(`/api/tables/${deleteTable.dataset.deleteTable}`, { method: "DELETE" });
+          await refreshTables();
+          return toast(t("toast.tableDeleted"));
+        }
+      } catch (error) {
+        toast(error.message);
+      }
+    });
+
+    document.addEventListener("input", (event) => {
+      const note = event.target.closest("[data-note]");
+      if (note && state.cart[note.dataset.note]) state.cart[note.dataset.note].note = note.value;
+    });
+
+    els.tableSelect.addEventListener("change", async (event) => {
+      state.table = event.target.value;
+      history.replaceState(null, "", `?table=${encodeURIComponent(state.table)}`);
+      await refreshOrders();
+      render();
+    });
+
+    els.submitOrder.addEventListener("click", () => submitOrder().catch((error) => toast(error.message)));
+    $("clearCart").onclick = () => { state.cart = {}; render(); };
+    $("printKitchen").onclick = () => window.print();
+    $("exportPdf").onclick = () => { setView("reports"); setTimeout(() => window.print(), 100); };
+    $("generateQr").onclick = async () => {
+      try {
+        await ensureTableCount($("tableCount").value);
+        renderQrCodes(true);
+      } catch (error) {
+        toast(error.message);
+      }
+    };
+    $("printQr").onclick = async () => {
+      try {
+        await ensureTableCount($("tableCount").value);
+        renderQrCodes(true);
+        window.print();
+      } catch (error) {
+        toast(error.message);
+      }
+    };
+
+    $("loginBtn").onclick = async () => {
+      const password = prompt(t("prompt.password"));
+      if (!password) return;
+      try {
+        const user = await api("/api/login", {
+          method: "POST",
+          body: JSON.stringify({ password }),
+        });
+        state.role = user.role;
+        await refreshOrders();
+        await refreshReports();
+        render();
+        toast(t("toast.loginOk"));
+      } catch (error) {
+        toast(error.message);
+      }
+    };
+
+    $("logoutBtn").onclick = async () => {
+      await api("/api/logout", { method: "POST", body: "{}" });
+      state.role = null;
+      state.orders = [];
+      setView("customer");
+      await refreshOrders();
+      render();
+      toast(t("toast.logoutOk"));
+    };
+
+    $("enableNotifications").onclick = async () => {
+      if (!("Notification" in window)) return toast("Notification API not supported.");
+      const permission = await Notification.requestPermission();
+      toast(permission === "granted" ? t("toast.notificationsOn") : t("toast.notificationsOff"));
+    };
+
+    $("seedDemo").onclick = async () => {
+      const items = state.menu.slice(0, 2).map((item, index) => ({
+        id: item.id,
+        qty: index + 1,
+        note: index ? "" : (state.lang === "en" ? "No salt" : state.lang === "ku" ? "بێ نمک" : "بدون ملح"),
+      }));
+      await api("/api/orders", {
+        method: "POST",
+        body: JSON.stringify({ table: state.tables[0]?.number || "1", items }),
+      });
+      await refreshOrders();
+      render();
+      toast(t("toast.demoAdded"));
+    };
+
+    $("menuForm").onsubmit = async (event) => {
+      event.preventDefault();
+      try {
+        const imageFile = $("itemImageFile").files[0];
+        const image = imageFile ? await uploadImage(imageFile) : $("itemImageUrl").value.trim();
+        const payload = {
+          name: $("itemName").value.trim(),
+          category: $("itemCategory").value.trim(),
+          price: $("itemPrice").value,
+          image,
+          description: $("itemDesc").value.trim(),
+        };
+        await api("/api/menu", { method: "POST", body: JSON.stringify(payload) });
+        event.currentTarget.reset();
+        renderCategorySelect();
+        state.menu = await api("/api/menu");
+        render();
+        toast(t("toast.newItem"));
+      } catch (error) {
+        toast(error.message);
+      }
+    };
+
+    $("resetMenu").onclick = async () => {
+      state.menu = await api("/api/menu/reset", { method: "POST", body: "{}" });
+      render();
+      toast(t("toast.menuReset"));
+    };
+
+    $("tableForm").onsubmit = async (event) => {
+      event.preventDefault();
+      try {
+        const imageFile = $("tableImageFile").files[0];
+        const image = imageFile ? await uploadImage(imageFile) : $("tableImageUrl").value.trim();
+        await api("/api/tables", {
+          method: "POST",
+          body: JSON.stringify({
+            number: $("tableNumber").value.trim(),
+            image,
+            active: $("tableActive").checked,
+          }),
+        });
+        event.currentTarget.reset();
+        $("tableActive").checked = true;
+        await refreshTables();
+        toast(t("toast.tableAdded"));
+      } catch (error) {
+        toast(error.message);
+      }
+    };
+
+    $("toggleDark").onclick = async () => {
+      state.dark = !state.dark;
+      localStorage.setItem("med-dark", state.dark);
+      applyTheme();
+      await api("/api/settings/dark", { method: "POST", body: JSON.stringify({ dark: state.dark }) });
+    };
+
+    $("syncData").onclick = () => { location.href = `${API_BASE}/api/export`; };
+    $("publicBaseUrl").value = location.protocol === "file:" ? "http://localhost:5000/" : `${location.origin}${location.pathname}`;
+
+    async function poll() {
+      setInterval(async () => {
+        try {
+          const before = state.orders[0]?.id || 0;
+          await refreshOrders();
+          if (canStaff() && state.orders[0]?.id && state.orders[0].id !== before && "Notification" in window && Notification.permission === "granted") {
+            new Notification(t("cashier.title"), { body: `${t("table")} ${state.orders[0].table}` });
+          }
+          render();
+        } catch {
+        }
+      }, 5000);
+    }
+
+    async function bootstrap() {
+      await refreshBootstrap();
+      await refreshOrders();
+      await refreshReports();
+      render();
+      if (state.lang) localStorage.setItem("med-lang", state.lang);
+      poll();
+    }
+
+    bootstrap().catch((error) => toast(error.message));
+  </script>
+</body>
+</html>
